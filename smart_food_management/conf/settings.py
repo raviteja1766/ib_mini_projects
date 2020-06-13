@@ -1,0 +1,1 @@
+# write your smart_food_management settings

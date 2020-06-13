@@ -1,0 +1,195 @@
+{
+    "swagger": "2.0",
+    "host": "localhost:8080",
+    "basePath": "/efficient_food_usage/",
+    "info": {
+        "version": "1.0.0",
+        "title": "Efficient Food Usage",
+        "description": "An API's set used to minimize food wastage"
+    },
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "oauth": {
+            "tokenUrl": "http://auth.ibtspl.com/oauth2/",
+            "flow": "password",
+            "scopes": {
+                "read": "read users",
+                "write": "create users",
+                "update": "update users",
+                "delete": "delete users",
+                "superuser": "super user permission"
+            },
+            "type": "oauth2"
+        }
+    },
+    "definitions": {
+        "UserLoginRequestBody": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "username", "password"
+            ]
+        },
+        "UserLoginResponseBody": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "expires_in": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            },
+            "required": ["access_token", "refresh_token",
+                "expires_in", "user_id"
+            ]
+        },
+        "ItemResponseBody": {
+            "type": "object",
+            "properties": {
+                "item_id": {
+                    "type": "integer"
+                },
+                "item_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "GetMealsCommonResponseBody": {
+            "type": "object",
+            "properties": {
+                "meal_id": {
+                    "type": "integer"
+                },
+                "meal_type": {
+                    "type": "string",
+                    "enum": [
+                        "BREAKFAST", "LUNCH", "DINNER"
+                    ]
+                },
+                "date_time": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "meal_size": {
+                    "type": "string",
+                    "enum": [
+                        "FULLMEAL", "HALFMEAL", "CUSTOMMEAL", "SKIPMEAL"
+                    ]
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ItemResponseBody"
+                    }
+                },
+                "timer_end": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "meal_status": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "date_time", "start_time", "end_time", "meal_type", "items",
+                "meal_status"
+            ]
+        }
+    },
+    "parameters": {
+        "UserParametarize": {
+            "name": "UserCredentials",
+            "in": "body",
+            "description": "User to register",
+            "schema": {
+                "$ref": "#/definitions/UserLoginRequestBody"
+            },
+            "required": true
+        }
+    },
+    "responses": {
+        "InvalidLoginResponse": {
+            "description": "Unauthorised"
+        },
+        "AccessTokenResponse": {
+            "description": "Succesful",
+            "schema": {
+                "$ref": "#/definitions/UserLoginResponseBody"
+            }
+        },
+        "GetMealsDetails": {
+            "description": "Successful",
+            "schema": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/GetMealsCommonResponseBody"
+                }
+            }
+        }
+    },
+    "paths": {
+        "/login/v1/": {
+            "post": {
+                "operationId": "login_user",
+                "summary": "Create user",
+                "description": "Create user in database",
+                "parameters": [{
+                    "$ref": "#/parameters/UserParametarize"
+                }],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/AccessTokenResponse"
+                    },
+                    "401": {
+                        "$ref": "#/responses/InvalidLoginResponse"
+                    }
+                }
+            }
+        },
+        "/meals_info/v1": {
+            "get": {
+                "operationId": "get_meals_to_user",
+                "summary": "Get Meal Details Of The Day",
+                "description": "",
+                "security": [{
+                    "oauth": ["read"]
+                }],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/GetMealsDetails"
+                    }
+                }
+            }
+        }
+    }
+}

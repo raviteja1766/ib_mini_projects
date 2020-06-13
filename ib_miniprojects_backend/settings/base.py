@@ -339,10 +339,10 @@ MOCK_X_IB_REQUEST_ID = True
 
 STAGE = os.environ.get("STAGE", "local")
 
-AUTH_USER_MODEL = 'content_management_portal.User'
+AUTH_USER_MODEL = 'smart_food_management.User'
 
 
-DEFAULT_OAUTH_APPLICATION_NAME = 'content_management_portal'
+DEFAULT_OAUTH_APPLICATION_NAME = 'smart_food_management'
 DEFAULT_OAUTH_CLIENT_ID = ""
 DEFAULT_OAUTH_CLIENT_SECRET = ""
 DEFAULT_OAUTH_SCOPES = "read write superuser"
