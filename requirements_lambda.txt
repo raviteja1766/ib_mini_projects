@@ -1,0 +1,4 @@
+-r requirements_project.txt
+-r requirements_db.txt
+-r requirements_test.txt
+-r requirements_deploy.txt

@@ -1,0 +1,1290 @@
+{
+    "swagger": "2.0",
+    "host": "localhost:8080",
+    "basePath": "/content_management_portal/",
+    "info": {
+        "version": "1.0.0",
+        "title": "Content Management",
+        "description": "Simple API to post and comment in social app"
+    },
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "oauth": {
+            "tokenUrl": "http://auth.ibtspl.com/oauth2/",
+            "flow": "password",
+            "scopes": {
+                "read": "read users",
+                "write": "create users",
+                "update": "update users",
+                "delete": "delete users",
+                "superuser": "super user permission"
+            },
+            "type": "oauth2"
+        }
+    },
+    "definitions": {
+        "UserLoginRequestBody": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "username", "password"
+            ]
+        },
+        "UserLoginResponseBody": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "expires_in": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            },
+            "required": ["access_token", "refresh_token",
+                "expires_in", "user_id"
+            ]
+        },
+        "StatementRequestBody": {
+            "type": "object",
+            "properties": {
+                "short_text": {
+                    "type": "string"
+                },
+                "problem_description": {
+                    "type": "object",
+                    "properties": {
+                        "content_type": {
+                            "type": "string",
+                            "enum": [
+                                "MARKDOWN", "HTML", "TEXT", "LATEX"
+                            ]
+                        },
+                        "content": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "content", "content_type"
+                    ]
+                }
+            },
+            "required": [
+                "short_text", "problem_description"
+            ]
+        },
+        "QuestionRequestBody": {
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "question_id": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/StatementRequestBody"
+                }
+
+            ]
+        },
+        "QuestionResponseBody": {
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "question_id": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": ["question_id"]
+                },
+                {
+                    "$ref": "#/definitions/StatementRequestBody"
+                }
+
+            ]
+        },
+        "CommonRequestBody": {
+            "type": "object",
+            "properties": {
+                "file_name": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string",
+                    "enum": [
+                        "PYTHON", "C", "CPP", "CS", "JAVASCRIPT",
+                        "JAVA", "PHP", "RUBY"
+                    ]
+                },
+                "solution_content": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_name", "language", "solution_content"
+            ]
+        },
+        "RoughSolutionRequestBody": {
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "rough_solution_id": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/CommonRequestBody"
+                }
+            ]
+        },
+        "PrefilledCodeRequestBody": {
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "prefilled_code_id": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/CommonRequestBody"
+                }
+            ]
+        },
+        "CleanSolutionRequestBody": {
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "clean_solution_id": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/CommonRequestBody"
+                }
+            ]
+        },
+        "CommonResponseBody": {
+            "type": "object",
+            "properties": {
+                "file_name": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string",
+                    "enum": [
+                        "PYTHON", "C", "CPP", "CS", "JAVASCRIPT",
+                        "JAVA", "PHP", "RUBY"
+                    ]
+                },
+                "solution_content": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_name", "language", "solution_content"
+            ]
+
+        },
+        "RoughSolutionResponseBody": {
+
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "rough_solution_id": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "rough_solution_id"
+                    ]
+                },
+                {
+                    "$ref": "#/definitions/CommonResponseBody"
+                }
+            ]
+
+        },
+        "RoughSolutionFinalResponseBody": {
+            "type": "object",
+            "properties": {
+                "question_id": {
+                    "type": "integer"
+                },
+                "rough_solutions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RoughSolutionResponseBody"
+                    }
+                }
+            }
+        },
+        "PrefilledCodeResponseBody": {
+
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "prefilled_code_id": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "prefilled_code_id"
+                    ]
+                },
+                {
+                    "$ref": "#/definitions/CommonResponseBody"
+                }
+            ]
+        },
+        "PrefilledFinalResponseBody": {
+            "type": "object",
+            "properties": {
+                "question_id": {
+                    "type": "integer"
+                },
+                "prefilled_codes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PrefilledCodeResponseBody"
+                    }
+                }
+            }
+        },
+        "CleanSolutionResponseBody": {
+
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "clean_solution_id": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "clean_solution_id"
+                    ]
+                },
+                {
+                    "$ref": "#/definitions/CommonResponseBody"
+                }
+            ]
+        },
+        "CleanSolutionFinalResponseBody": {
+            "type": "object",
+            "properties": {
+                "question_id": {
+                    "type": "integer"
+                },
+                "clean_solutions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CleanSolutionResponseBody"
+                    }
+                }
+            }
+        },
+        "TestCasesRequestBody": {
+            "type": "object",
+            "properties": {
+                "test_case_id": {
+                    "type": "integer"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "output": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "integer"
+                },
+                "is_hidden": {
+                    "type": "boolean"
+                },
+                "test_case_number": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "score", "is_hidden", "test_case_number"
+            ]
+        },
+        "TestCasesResponseBody": {
+            "type": "object",
+            "properties": {
+                "test_case_id": {
+                    "type": "integer"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "output": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "integer"
+                },
+                "is_hidden": {
+                    "type": "boolean"
+                },
+                "test_case_number": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "test_case_id", "input", "output", "score", "is_hidden", "test_case_number"
+            ]
+        },
+        "TestCaseFinalResponseBody": {
+            "type": "object",
+            "properties": {
+                "question_id": {
+                    "type": "integer"
+                },
+                "test_case": {
+                    "$ref": "#/definitions/TestCasesResponseBody"
+                }
+            },
+            "required": ["question_id", "test_case"]
+        },
+        "TestCaseCommonRequestBody": {
+            "type": "object",
+            "properties": {
+                "test_case_id": {
+                    "type": "integer"
+                },
+                "test_case_number": {
+                    "type": "integer"
+                }
+            },
+            "required": ["test_case_id", "test_case_number"]
+        },
+        "TestCasesSwapRequestBody": {
+            "type": "object",
+            "properties": {
+                "first_test_case": {
+                    "$ref": "#/definitions/TestCaseCommonRequestBody"
+                },
+                "second_test_case": {
+                    "$ref": "#/definitions/TestCaseCommonRequestBody"
+                }
+            },
+            "required": ["first_test_case", "second_test_case"]
+        },
+        "HintCommonRequestBody": {
+            "type": "object",
+            "properties": {
+                "hint_id": {
+                    "type": "integer"
+                },
+                "hint_number": {
+                    "type": "integer"
+                }
+            },
+            "required": ["hint_id", "hint_number"]
+        },
+        "HintSwapRequestBody": {
+            "type": "object",
+            "properties": {
+                "first_hint": {
+                    "$ref": "#/definitions/HintCommonRequestBody"
+                },
+                "second_hint": {
+                    "$ref": "#/definitions/HintCommonRequestBody"
+                }
+            },
+            "required": ["first_hint", "second_hint"]
+        },
+        "SolutionApproachCommonBody": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "object",
+                    "properties": {
+                        "content_type": {
+                            "type": "string",
+                            "enum": [
+                                "HTML", "MARKDOWN", "LATEX", "TEXT"
+                            ]
+                        },
+                        "content": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["content_type", "content"]
+
+                },
+                "complexity_analysis": {
+                    "type": "object",
+                    "properties": {
+                        "content_type": {
+                            "type": "string",
+                            "enum": [
+                                "HTML", "MARKDOWN", "LATEX", "TEXT"
+                            ]
+                        },
+                        "content": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["content_type", "content"]
+                }
+            },
+            "required": [
+                "description", "complexity_analysis", "title"
+            ]
+        },
+        "SolutionApproachRequestBody": {
+
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "solution_approach_id": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/SolutionApproachCommonBody"
+                }
+            ]
+        },
+        "SolutionApproachResponseBody": {
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "solution_approach_id": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": ["solution_approach_id"]
+                },
+                {
+                    "$ref": "#/definitions/SolutionApproachCommonBody"
+                }
+            ]
+        },
+        "SolutionApproachFinalResponseBody": {
+            "type": "object",
+            "properties": {
+                "question_id": {
+                    "type": "integer"
+                },
+                "solution_approach": {
+                    "$ref": "#/definitions/SolutionApproachResponseBody"
+                }
+            },
+            "required": ["question_id", "solution_approach"]
+        },
+        "HintRequestBody": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "object",
+                    "properties": {
+                        "content_type": {
+                            "type": "string",
+                            "enum": [
+                                "HTML", "MARKDOWN", "LATEX", "TEXT"
+                            ]
+                        },
+                        "content": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "content_type", "content"
+                    ]
+                },
+                "hint_number": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "description", "title", "hint_number"
+            ]
+        },
+        "HintFinalRequestBody": {
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "hint_id": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/HintRequestBody"
+                }
+            ]
+        },
+        "HintReponseBody": {
+            "allOf": [{
+                    "type": "object",
+                    "properties": {
+                        "hint_id": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": ["hint_id"]
+
+                },
+                {
+                    "$ref": "#/definitions/HintRequestBody"
+                }
+            ]
+        },
+        "HintFinalReponseBody": {
+            "type": "object",
+            "properties": {
+                "question_id": {
+                    "type": "integer"
+                },
+                "hint": {
+                    "$ref": "#/definitions/HintReponseBody"
+                }
+            }
+        },
+        "QuestionCompletResponseBody": {
+            "type": "object",
+            "properties": {
+                "question_id": {
+                    "type": "integer"
+                },
+                "statement": {
+                    "$ref": "#/definitions/StatementRequestBody"
+                },
+                "rough_solutions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RoughSolutionResponseBody"
+                    }
+                },
+                "test_cases": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/TestCasesResponseBody"
+                    }
+                },
+                "prefilled_codes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PrefilledCodeResponseBody"
+                    }
+                },
+                "solution_approach": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SolutionApproachResponseBody"
+                    }
+                },
+                "clean_solutions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CleanSolutionResponseBody"
+                    }
+                },
+                "hints": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/HintReponseBody"
+                    }
+                }
+            },
+            "required": [
+                "question_id", "statement", "rough_solutions",
+                "test_cases", "prefilled_codes", "solution_approach",
+                "clean_solutions", "hints"
+            ]
+        },
+        "HomePageResponseBody": {
+            "type": "object",
+            "properties": {
+                "total_questions": {
+                    "type": "integer"
+                },
+                "offset": {
+                    "type": "integer"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "questions_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CodingQuestionResponseBody"
+                    }
+                }
+            },
+            "required": [
+                "total_questions", "questions_list", "offset", "limit"
+            ]
+        },
+        "CodingQuestionResponseBody": {
+            "type": "object",
+            "properties": {
+                "question_id": {
+                    "type": "integer"
+                },
+                "statement": {
+                    "type": "string"
+                },
+                "rough_solution_status": {
+                    "type": "boolean"
+                },
+                "test_cases_status": {
+                    "type": "boolean"
+                },
+                "prefilled_code_status": {
+                    "type": "boolean"
+                },
+                "solution_approach_status": {
+                    "type": "boolean"
+                },
+                "clean_solution_status": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "question_id", "statement", "rough_solution_status",
+                "test_cases_status", "prefilled_code_status",
+                "solution_approach_status", "clean_solution_status"
+            ]
+        }
+    },
+    "parameters": {
+        "UserParametarize": {
+            "name": "UserCredentials",
+            "in": "body",
+            "description": "User to register",
+            "schema": {
+                "$ref": "#/definitions/UserLoginRequestBody"
+            },
+            "required": true
+        },
+        "QuestionParametarize": {
+            "name": "question_id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the Question",
+            "type": "integer"
+        },
+        "StatementParametarize": {
+            "name": "CreateQuestionRequestBody",
+            "in": "body",
+            "description": "Statement to Question",
+            "schema": {
+                "$ref": "#/definitions/QuestionRequestBody"
+            },
+            "required": true
+        },
+        "RoughSolutionsParametarize": {
+            "name": "ListOfRoughSolutionsRequestBody",
+            "in": "body",
+            "description": "Rough solutions to Question",
+            "schema": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/RoughSolutionRequestBody"
+                }
+            },
+            "required": true
+        },
+        "RoughSolutinParametarize": {
+            "name": "rough_solution_id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the Rough Solution",
+            "type": "integer"
+        },
+        "TestCaseParametarizer": {
+            "name": "test_case_id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the Testcase",
+            "type": "integer"
+        },
+        "TestCaseParametarize": {
+            "name": "TestCaseRequestBody",
+            "in": "body",
+            "description": "Test Cases for Question",
+            "schema": {
+                "$ref": "#/definitions/TestCasesRequestBody"
+            },
+            "required": true
+        },
+        "PrefilledCodeParametarize": {
+            "name": "PrefilledCodesRequestBody",
+            "in": "body",
+            "description": "Prefilled Codes to Question",
+            "schema": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/PrefilledCodeRequestBody"
+                }
+            },
+            "required": true
+        },
+        "PrefilledCodeParametarizer": {
+            "name": "prefilled_code_id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the Prefilled Code",
+            "type": "integer"
+        },
+        "CleanSolutionParametarize": {
+            "name": "CleanSolutionsRequestBody",
+            "in": "body",
+            "description": "Clean Solution to Question",
+            "schema": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/CleanSolutionRequestBody"
+                }
+            },
+            "required": true
+        },
+        "CleanSolutionParametarizer": {
+            "name": "clean_solution_id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the Clean Solution",
+            "type": "integer"
+        },
+        "SolutionApproachParametarize": {
+            "name": "SolutionApproachRequestBody",
+            "in": "body",
+            "description": "Solution Approaches to Question",
+            "required": true,
+            "schema": {
+                "$ref": "#/definitions/SolutionApproachRequestBody"
+            }
+        },
+        "HintsParametarizer": {
+            "name": "hint_id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the Hint",
+            "type": "integer"
+        },
+        "HintsParametarize": {
+            "name": "HintsRequestBody",
+            "in": "body",
+            "description": "Hints for Question body",
+            "required": true,
+            "schema": {
+                "$ref": "#/definitions/HintFinalRequestBody"
+            }
+        }
+    },
+    "responses": {
+        "InvalidLoginResponse": {
+            "description": "Unauthorised"
+        },
+        "AccessTokenResponse": {
+            "description": "Succesful",
+            "schema": {
+                "$ref": "#/definitions/UserLoginResponseBody"
+            }
+        },
+        "QuestionCompleteBody": {
+            "description": "Successful",
+            "schema": {
+                "$ref": "#/definitions/QuestionCompletResponseBody"
+            }
+        }
+    },
+    "paths": {
+        "/login/v1/": {
+            "post": {
+                "operationId": "login_user",
+                "summary": "Create user",
+                "description": "Create user in database",
+                "parameters": [{
+                    "$ref": "#/parameters/UserParametarize"
+                }],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/AccessTokenResponse"
+                    },
+                    "401": {
+                        "$ref": "#/responses/InvalidLoginResponse"
+                    }
+                }
+            }
+        },
+        "/coding_questions/statement/v1/": {
+            "post": {
+                "operationId": "create_question",
+                "summary": "Create question",
+                "description": "Create a question",
+                "parameters": [{
+                    "$ref": "#/parameters/StatementParametarize"
+                }],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "Statement successful",
+                        "schema": {
+                            "$ref": "#/definitions/QuestionResponseBody"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/v1/": {
+            "get": {
+                "operationId": "get_question_complete_details",
+                "summary": "Get question",
+                "description": "Get question",
+                "parameters": [{
+                    "$ref": "#/parameters/QuestionParametarize"
+                }],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "$ref": "#/responses/QuestionCompleteBody"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/rough_solutions/v1/": {
+            "post": {
+                "operationId": "create_rough_solutions",
+                "summary": "Create rough solution to question",
+                "description": "Create a solution to question",
+                "parameters": [{
+                    "$ref": "#/parameters/QuestionParametarize"
+                }, {
+                    "$ref": "#/parameters/RoughSolutionsParametarize"
+                }],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/RoughSolutionFinalResponseBody"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/rough_solutions/{rough_solution_id}/v1/": {
+            "delete": {
+                "operationId": "delete_rough_solution_to_question",
+                "summary": "delete rough solution to question",
+                "description": "delete rough solution to question",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "$ref": "#/parameters/RoughSolutinParametarize"
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "Statement successful"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/coding_questions/v1": {
+            "get": {
+                "operationId": "get_coding_questions_details",
+                "summary": "Details for question",
+                "description": "Details for Question",
+                "parameters": [{
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Question Starting Position",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of questions from Offset Position",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/HomePageResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/test_cases/v1/": {
+            "post": {
+                "operationId": "create_test_cases",
+                "summary": "Create Test cases for Question",
+                "description": "Create Test Cases for question",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "$ref": "#/parameters/TestCaseParametarize"
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/TestCaseFinalResponseBody"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/test_cases/{test_case_id}/v1/": {
+            "delete": {
+                "operationId": "delete_test_case_to_question",
+                "summary": "delete test case to question",
+                "description": "delete test case to question",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "$ref": "#/parameters/TestCaseParametarizer"
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "Deleted successful"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/test_cases/swap/v1/": {
+            "put": {
+                "operationId": "change_test_case_order",
+                "summary": "Change test case order",
+                "description": "Change test case order",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "name": "TestCasesOrderSwap",
+                        "in": "body",
+                        "description": "Swap Test Cases for Question",
+                        "schema": {
+                            "$ref": "#/definitions/TestCasesSwapRequestBody"
+                        },
+                        "required": true
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Test Case Swap successful"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/prefilled_codes/v1/": {
+            "post": {
+                "operationId": "create_prefilled_codes_to_question",
+                "summary": "Create Prefilled Codes for Question",
+                "description": "Create Prefilled Codes for question",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "$ref": "#/parameters/PrefilledCodeParametarize"
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/PrefilledFinalResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/prefilled_codes/{prefilled_code_id}/v1/": {
+            "delete": {
+                "operationId": "delete_prefilled_code_to_question",
+                "summary": "delete prefilled code to question",
+                "description": "delete prefilled code to question",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "$ref": "#/parameters/PrefilledCodeParametarizer"
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "Deleted successful"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/solution_approaches/v1/": {
+            "post": {
+                "operationId": "create_solution_approach_to_question",
+                "summary": "Create Solution Approaches for Question",
+                "description": "Create Solution Approaches for question",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "$ref": "#/parameters/SolutionApproachParametarize"
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/SolutionApproachFinalResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/clean_solutions/v1/": {
+            "post": {
+                "operationId": "create_clean_solutions_to_question",
+                "summary": "Create Clean Solutions for Question",
+                "description": "Create Clean Solutions for question",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "$ref": "#/parameters/CleanSolutionParametarize"
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/CleanSolutionFinalResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/clean_solutions/{clean_solution_id}/v1/": {
+            "delete": {
+                "operationId": "delete_clean_solution_to_question",
+                "summary": "delete clean solution to question",
+                "description": "delete clean solution  to question",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "$ref": "#/parameters/CleanSolutionParametarizer"
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "Deleted successful"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/hints/v1/": {
+            "post": {
+                "operationId": "create_hints_to_question",
+                "summary": "Create Hints for Question",
+                "description": "Create Hints for question",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "$ref": "#/parameters/HintsParametarize"
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/HintFinalReponseBody"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/hints/{hint_id}/v1/": {
+            "delete": {
+                "operationId": "delete_hint_to_question",
+                "summary": "Delete Hint for Question",
+                "description": "Delete Hints for question",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "$ref": "#/parameters/HintsParametarizer"
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "201": {
+                        "description": "successful"
+                    }
+                }
+            }
+        },
+        "/coding_questions/{question_id}/hints/swap/v1/": {
+            "put": {
+                "operationId": "change_hints_order",
+                "summary": "Change hints order",
+                "description": "Change hints order",
+                "parameters": [{
+                        "$ref": "#/parameters/QuestionParametarize"
+                    },
+                    {
+                        "name": "HintsOrderSwap",
+                        "in": "body",
+                        "description": "Swap Hints for Question",
+                        "schema": {
+                            "$ref": "#/definitions/HintSwapRequestBody"
+                        },
+                        "required": true
+                    }
+                ],
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Hints Swap successful"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        }
+    }
+}

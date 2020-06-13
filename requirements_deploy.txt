@@ -1,0 +1,10 @@
+git+https://github.com/anush0247/Zappa.git@apigateway_stages_multiple_routes_support
+git+https://github.com/anush0247/lambda-packages.git@master
+boto==2.49.0
+boto3==1.9.167
+pyOpenSSL==19.0.0
+ndg-httpsclient==0.4.3
+pyasn1==0.4.2
+tblib==1.4.0
+cfn-flip==1.0.2
+pip==9.0.1

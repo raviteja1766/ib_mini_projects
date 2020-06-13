@@ -1,0 +1,1 @@
+# write your content_management_portal settings
