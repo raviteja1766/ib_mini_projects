@@ -23,11 +23,11 @@ def api_wrapper(*args, **kwargs):
     question_storage = QuestionStorageImplementation()
     presenter = PresenterImplementation()
     interactor = CreateUpdateQuestionInteractor(
-        question_storage=question_storage, presenter=presenter
+        question_storage=question_storage
     )
     question_dto = _get_question_dto(user_obj.id, question_dict)
-    interactor_response = interactor.create_update_question(
-        question_dto=question_dto
+    interactor_response = interactor.create_update_question_wrapper(
+        question_dto=question_dto, presenter=presenter
     )
     data = json.dumps(interactor_response)
     response = HttpResponse(data, status=201)
