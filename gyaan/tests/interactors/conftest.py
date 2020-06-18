@@ -1,6 +1,7 @@
 import pytest
 import datetime
 from gyaan.interactors.storages.dtos import *
+from gyaan.interactors.presenters.dtos import *
 
 
 @pytest.fixture()
@@ -134,4 +135,89 @@ def complete_post_details(
         post_tag_ids=post_tag_ids,
         tags=tags,
         users_dtos=users_dtos
+    )
+
+# -------------------DomainDetails----------------------------------
+
+@pytest.fixture()
+def domain_dto():
+    return DomainDTO(
+        domain_id=1,
+        name="domain_name",
+        description="domain description"
+    )
+
+@pytest.fixture()
+def domain_stats():
+    return DomainStatsDTO(
+        domain_id=1,
+        followers_count=233,
+        posts_count=1,
+        bookmarked_count=234
+    )
+
+@pytest.fixture()
+def domain_experts():
+    return [
+        UserDetailsDTO(
+            user_id=2,
+            name="user_1",
+            profile_pic_url="profilepic_1"
+        )
+    ]
+
+@pytest.fixture()
+def join_requests():
+    return [
+        DomainJoinRequestDTO(
+            request_id=2,
+            user_id=3
+        )
+    ]
+
+@pytest.fixture()
+def requested_users():
+    return [
+        UserDetailsDTO(
+            user_id=3,
+            name="user_1",
+            profile_pic_url="profilepic_1"
+        )
+    ]
+
+@pytest.fixture()
+def domain_details_dto(
+        domain_dto, domain_stats, users_dtos,
+        join_requests, requested_users):
+    return DomainDetailsDTO(
+        domain=domain_dto,
+        domain_stats=domain_stats,
+        domain_experts=users_dtos,
+        join_requests=join_requests,
+        requested_users=requested_users,
+        user_id=1,
+        is_user_domain_expert=True
+    )
+
+
+@pytest.fixture()
+def user_not_domain_expert_details_dto(
+        domain_dto, domain_stats, domain_experts):
+    return DomainDetailsDTO(
+        domain=domain_dto,
+        domain_stats=domain_stats,
+        domain_experts=domain_experts,
+        join_requests=[],
+        requested_users=[],
+        user_id=1,
+        is_user_domain_expert=False
+    )
+
+
+@pytest.fixture()
+def domain_with_posts_dto(domain_details_dto, complete_post_details):
+
+    return DomainDetailsWithPosts(
+        post_details=complete_post_details,
+        domain_details=domain_details_dto
     )

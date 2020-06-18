@@ -71,7 +71,7 @@ def test_get_posts_interactor_given_valid_details_returns_complete_post_details(
     storage.get_comments_details.return_value = comment_dtos
     storage.get_comment_reactions_count.return_value = comment_reaction_counts
     storage.get_comments_replies_count.return_value = reply_counts
-    storage.get_user_details.return_value = users_dtos
+    storage.get_users_details.return_value = users_dtos
     interactor = GetPostsInteractor(storage=storage)
     presenter = create_autospec(PresenterInterface)
 
@@ -90,5 +90,5 @@ def test_get_posts_interactor_given_valid_details_returns_complete_post_details(
     storage.get_comments_details.assert_called_once_with(comment_ids=comment_ids)
     storage.get_comment_reactions_count.assert_called_once_with(comment_ids=comment_ids)
     storage.get_comments_replies_count.assert_called_once_with(comment_ids=comment_ids)
-    storage.get_user_details.assert_called_once_with(user_ids=user_ids)
+    storage.get_users_details.assert_called_once_with(user_ids=user_ids)
     assert interactor_response == complete_post_details
