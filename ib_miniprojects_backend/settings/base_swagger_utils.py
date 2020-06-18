@@ -18,7 +18,7 @@ from django_swagger_utils.drf_server.utils.general.import_app_settings import \
 
 THIRD_PARTY_APPS = []
 APPS = [
-    'gyaan',
+    'content_management_portal',
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS
@@ -61,7 +61,7 @@ SWAGGER_UTILS = {
         }
     },
     "APPS": {
-        "gyaan": {},
+        "content_management_portal": {},
     },
     "HOST": os.environ.get('APIGATEWAY_ENDPOINT', '127.0.0.1:8000'),
 }
