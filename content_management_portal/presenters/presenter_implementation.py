@@ -302,3 +302,7 @@ class PresenterImplementation(PresenterInterface):
     def raise_exception_for_solution_approach_exists(self):
 
         raise BadRequest(*SOLUTION_APPROACH_ALREADY_EXISTS)
+
+    def raise_exception_for_duplicate_ids(self):
+
+        raise BadRequest(*DUPLICATE_IDS_EXCEPTION)

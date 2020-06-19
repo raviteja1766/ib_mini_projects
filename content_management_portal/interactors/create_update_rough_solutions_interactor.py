@@ -8,10 +8,11 @@ from content_management_portal.interactors.storages\
 from content_management_portal.interactors.storages.dtos\
     import RoughSolutionDto
 from content_management_portal.interactors.mixins.question_validation \
-    import QuestionValidationMixin
+    import QuestionValidationMixin, DuplicateIdsValidationMixin
 
 
-class CreateUpdateRoughSolutionsInteractor(QuestionValidationMixin):
+class CreateUpdateRoughSolutionsInteractor(
+        QuestionValidationMixin, DuplicateIdsValidationMixin):
 
     def __init__(self, presenter: PresenterInterface,
                  rough_storage: RoughSolutionStorageInterface,
@@ -60,6 +61,7 @@ class CreateUpdateRoughSolutionsInteractor(QuestionValidationMixin):
         rough_solution_ids = self._get_rough_solution_ids(
             rough_solutions_dto=rough_solutions_dto
         )
+        self._validate_duplication_of_rough_solution_ids(rough_solution_ids)
         db_rough_solution_ids = self.rough_storage\
             .get_database_rough_solution_ids(rough_solution_ids)
         sorted_update_rough_solution_ids = sorted(rough_solution_ids)
@@ -73,6 +75,12 @@ class CreateUpdateRoughSolutionsInteractor(QuestionValidationMixin):
             question_id=question_id,
             rough_solution_ids=rough_solution_ids
         )
+
+    def _validate_duplication_of_rough_solution_ids(
+            self, rough_solution_ids: int):
+
+        if self.is_duplicate_ids_present(rough_solution_ids):
+            self.presenter.raise_exception_for_duplicate_ids()
 
     def _validations_for_update_rough_solutions_questions(
             self, question_id: int,rough_solution_ids: List[int]):

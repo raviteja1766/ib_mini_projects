@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import create_autospec
-from django_swagger_utils.drf_server.exceptions import NotFound, Forbidden
+from django_swagger_utils.drf_server.exceptions \
+    import NotFound, Forbidden, BadRequest
 from content_management_portal.interactors.presenters.presenter_interface\
     import PresenterInterface
 from content_management_portal.interactors.storages\
@@ -42,6 +43,42 @@ def test_create_update_rough_solution_given_invalid_question_returns_exception(
     )
     presenter.raise_exception_for_invalid_question.assert_called_once()
 
+def test_create_update_rough_solution_given_duplicate_rough_ids_returns_exception():
+
+    # Arrange
+    question_id = 1
+    rough_solutions_dto = [
+        RoughSolutionDto(
+            id=1, file_name="prime.py", language_type="PYTHON",
+            text_code="text code for python", question_id=1, user_id=1
+        ),
+        RoughSolutionDto(
+            id=1, file_name="java.py", language_type="JAVA",
+            text_code="text code for java", question_id=1, user_id=1
+        )
+    ]
+    presenter = create_autospec(PresenterInterface)
+    question_storage = create_autospec(QuestionStorageInterface)
+    rough_storage = create_autospec(RoughSolutionStorageInterface)
+    interactor = CreateUpdateRoughSolutionsInteractor(
+        question_storage=question_storage, presenter=presenter,
+        rough_storage=rough_storage
+    )
+    question_storage.validate_question_id.return_value = True
+    presenter.raise_exception_for_duplicate_ids.side_effect = BadRequest
+
+    # Act
+    with pytest.raises(BadRequest):
+        interactor.create_update_rough_solutions(
+            question_id=question_id,
+            rough_solutions_dto=rough_solutions_dto
+        )
+
+    # Assert
+    question_storage.validate_question_id.assert_called_once_with(
+        question_id=question_id
+    )
+    presenter.raise_exception_for_duplicate_ids.assert_called_once()
 
 def test_create_update_rough_solution_given_invalid_rough_solution_returns_exception(
         rough_solutions_dto):

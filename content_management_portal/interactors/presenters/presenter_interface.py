@@ -130,3 +130,9 @@ class PresenterInterface(ABC):
     @abstractmethod
     def raise_exception_for_solution_approach_exists(self):
         pass
+
+    # Duplicate-ids
+
+    @abstractmethod
+    def raise_exception_for_duplicate_ids(self):
+        pass

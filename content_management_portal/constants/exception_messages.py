@@ -44,3 +44,6 @@ INVALID_HINT_EXCEPTION = (
 SOLUTION_APPROACH_ALREADY_EXISTS = (
     "Question cannot have morethan one solution approach", "SOLUTION_APPROACH_ALREADY_EXISTS"
 )
+DUPLICATE_IDS_EXCEPTION = (
+    "Duplication of ids not accepted for updation", "DUPLICATE_IDS_EXCEPTION"
+)
