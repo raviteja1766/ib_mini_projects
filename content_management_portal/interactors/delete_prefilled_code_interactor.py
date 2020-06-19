@@ -4,9 +4,10 @@ from content_management_portal.interactors.storages\
     .prefilled_code_storage_interface import PrefilledCodeStorageInterface
 from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
-
-class DeletePrefilledCodeInteractor:
+class DeletePrefilledCodeInteractor(QuestionValidationMixin):
 
     def __init__(
             self, presenter: PresenterInterface,
@@ -19,10 +20,7 @@ class DeletePrefilledCodeInteractor:
     def delete_prefilled_code_to_question(
             self, question_id: int, prefilled_code_id: int):
 
-        is_invalid_question = not self.question_storage.validate_question_id(
-            question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()
+        self.validate_question_id(question_id=question_id)
         is_invalid_prefilled_code = not self.prefilled_code_storage\
             .validate_prefilled_code(prefilled_code_id=prefilled_code_id)
         if is_invalid_prefilled_code:

@@ -4,9 +4,11 @@ from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
 from content_management_portal.interactors.storages\
     .rough_solution_storage_interface import RoughSolutionStorageInterface
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
 
-class DeleteRoughSolutionInteractor:
+class DeleteRoughSolutionInteractor(QuestionValidationMixin):
 
     def __init__(self, question_storage: QuestionStorageInterface,
                  rough_storage: RoughSolutionStorageInterface,
@@ -17,10 +19,8 @@ class DeleteRoughSolutionInteractor:
 
     def delete_rough_solution_to_question(self, question_id: int,
                                           rough_solution_id: int):
-        is_invalid_question = not self.question_storage.validate_question_id(
-            question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()
+
+        self.validate_question_id(question_id=question_id)
         is_invalid_rough_solution = not self.rough_storage\
             .validate_rough_solution_id(rough_solution_id=rough_solution_id)
         if is_invalid_rough_solution:

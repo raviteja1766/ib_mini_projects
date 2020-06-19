@@ -7,8 +7,11 @@ from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
 from content_management_portal.interactors.storages.dtos\
     import HintSwapDto
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
-class UpdateHintsOrderInteractor:
+
+class UpdateHintsOrderInteractor(QuestionValidationMixin):
 
     def __init__(
             self, presenter: PresenterInterface,
@@ -21,17 +24,10 @@ class UpdateHintsOrderInteractor:
     def update_hints_order(
             self, question_id: int, hints_dto: List[HintSwapDto]):
 
-        self._validations_for_question(question_id=question_id)
+        self.validate_question_id(question_id=question_id)
         self._validations_for_hints_dto(question_id, hints_dto)
         hints_dto = self.swap_hints_dto_order_id(hints_dto)
         self.hint_storage.update_hints_order(hints_dto)
-
-    def _validations_for_question(self, question_id: int):
-
-        is_invalid_question = not self.question_storage\
-            .validate_question_id(question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()
 
     def _validations_for_hints_dto(
             self, question_id: int, hints_dto: List[HintSwapDto]):

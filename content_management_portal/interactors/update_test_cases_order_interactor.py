@@ -7,8 +7,11 @@ from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
 from content_management_portal.interactors.storages.dtos\
     import TestCaseSwapDto
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
-class UpdateTestCasesOrderInteractor:
+
+class UpdateTestCasesOrderInteractor(QuestionValidationMixin):
 
     def __init__(
             self, presenter: PresenterInterface,
@@ -21,18 +24,11 @@ class UpdateTestCasesOrderInteractor:
     def update_test_cases_order(
             self, question_id: int, test_cases_dto: List[TestCaseSwapDto]):
 
-        self._validations_for_question(question_id=question_id)
+        self.validate_question_id(question_id=question_id)
         self._validations_for_test_cases_dto(question_id, test_cases_dto)
         test_cases_dto = self.swap_test_cases_dto_order_id(test_cases_dto)
         self.test_case_storage.update_test_cases_order(test_cases_dto)
-    
-    def _validations_for_question(self, question_id: int):
 
-        is_invalid_question = not self.question_storage\
-            .validate_question_id(question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()
-    
     def _validations_for_test_cases_dto(
             self, question_id: int, test_cases_dto: List[TestCaseSwapDto]):
 

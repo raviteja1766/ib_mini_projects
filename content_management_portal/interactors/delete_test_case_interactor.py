@@ -4,9 +4,11 @@ from content_management_portal.interactors.storages\
     .test_case_storage_interface import TestCaseStorageInterface
 from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
 
-class DeleteTestCaseInteractor:
+class DeleteTestCaseInteractor(QuestionValidationMixin):
 
     def __init__(
             self, presenter: PresenterInterface,
@@ -19,7 +21,7 @@ class DeleteTestCaseInteractor:
     def delete_test_case_to_question(
             self, question_id: int, test_case_id: int):
 
-        self._validations_for_question(question_id=question_id)
+        self.validate_question_id(question_id=question_id)
         is_invalid_test_case = not self.test_case_storage\
             .validate_test_case(test_case_id=test_case_id)
         if is_invalid_test_case:
@@ -41,10 +43,3 @@ class DeleteTestCaseInteractor:
                 test_case_id=test_case_id)
         self.test_case_storage.update_questions_next_test_cases_order(
             question_id=question_id, order_id=order_id)
-
-    def _validations_for_question(self, question_id: int):
-
-        is_invalid_question = not self.question_storage\
-            .validate_question_id(question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()

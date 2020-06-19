@@ -4,9 +4,10 @@ from content_management_portal.interactors.storages\
     .hint_storage_interface import HintStorageInterface
 from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
-
-class DeleteHintInteractor:
+class DeleteHintInteractor(QuestionValidationMixin):
 
     def __init__(
             self, presenter: PresenterInterface,
@@ -19,7 +20,7 @@ class DeleteHintInteractor:
     def delete_hint_to_question(
             self, question_id: int, hint_id: int):
 
-        self._validations_for_question(question_id=question_id)
+        self.validate_question_id(question_id=question_id)
 
         is_invalid_hint = not self.hint_storage\
             .validate_hint(hint_id=hint_id)
@@ -35,10 +36,3 @@ class DeleteHintInteractor:
                 hint_id=hint_id)
             self.hint_storage.update_questions_next_hints_order(
                 question_id=question_id, order_id=order_id)
-
-    def _validations_for_question(self, question_id: int):
-
-        is_invalid_question = not self.question_storage\
-            .validate_question_id(question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()

@@ -6,8 +6,11 @@ from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
 from content_management_portal.interactors.storages.dtos\
     import TestCaseDto
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
-class CreateUpdateTestCaseInteractor:
+
+class CreateUpdateTestCaseInteractor(QuestionValidationMixin):
 
     def __init__(
             self, presenter: PresenterInterface,
@@ -20,7 +23,7 @@ class CreateUpdateTestCaseInteractor:
     def create_update_test_case(self, test_case_dto: TestCaseDto):
 
         question_id = test_case_dto.question_id
-        self._validations_for_question(question_id=question_id)
+        self.validate_question_id(question_id=question_id)
         is_update_test_case = not test_case_dto.id is None
         if is_update_test_case:
             self._validations_for_test_case(test_case_dto)
@@ -59,11 +62,5 @@ class CreateUpdateTestCaseInteractor:
         if is_different_question:
             self.presenter.raise_exception_for_different_question()
 
-    def _validations_for_question(self, question_id: int):
-
-        is_invalid_question = not self.question_storage\
-            .validate_question_id(question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()
 
 

@@ -7,8 +7,10 @@ from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
 from content_management_portal.interactors.storages.dtos\
     import HintDto
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
-class CreateUpdateHintInteractor:
+class CreateUpdateHintInteractor(QuestionValidationMixin):
 
     def __init__(
             self, presenter: PresenterInterface,
@@ -21,7 +23,7 @@ class CreateUpdateHintInteractor:
     def create_update_hint(self, hint_dto: HintDto):
 
         question_id = hint_dto.question_id
-        self._validations_for_question(question_id=question_id)
+        self.validate_question_id(question_id=question_id)
         is_update_hint = not hint_dto.id is None
         if is_update_hint:
             self._validations_for_hint(hint_dto)
@@ -56,9 +58,9 @@ class CreateUpdateHintInteractor:
         if is_different_question:
             self.presenter.raise_exception_for_different_question()
 
-    def _validations_for_question(self, question_id: int):
+    # def _validations_for_question(self, question_id: int):
 
-        is_invalid_question = not self.question_storage\
-            .validate_question_id(question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()
+    #     is_invalid_question = not self.question_storage\
+    #         .validate_question_id(question_id=question_id)
+    #     if is_invalid_question:
+    #         self.presenter.raise_exception_for_invalid_question()

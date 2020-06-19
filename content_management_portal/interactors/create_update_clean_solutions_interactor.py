@@ -7,9 +7,11 @@ from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
 from content_management_portal.interactors.storages.dtos\
     import CleanSolutionDto
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
 
-class CreateUpdateCleanSolutionsInteractor:
+class CreateUpdateCleanSolutionsInteractor(QuestionValidationMixin):
 
     def __init__(self, presenter: PresenterInterface,
                  clean_solution_storage: CleanSolutionStorageInterface,
@@ -21,7 +23,7 @@ class CreateUpdateCleanSolutionsInteractor:
     def create_update_clean_solutions(
             self, question_id: int,
             clean_solutions_dto: List[CleanSolutionDto]):
-        self._validations_for_question(question_id=question_id)
+        self.validate_question_id(question_id=question_id)
         new_clean_solutions_dto, update_clean_solutions_dto =\
             self._get_new_and_update_clean_solutions_dto(clean_solutions_dto)
         if self._is_for_update_clean_solutions_exist(update_clean_solutions_dto):
@@ -38,13 +40,6 @@ class CreateUpdateCleanSolutionsInteractor:
         return self.presenter.get_response_for_create_update_clean_solutions(
             clean_solutions_dto=clean_solutions_dto
         )
-
-    def _validations_for_question(self, question_id: int):
-
-        is_invalid_question = not self.question_storage\
-            .validate_question_id(question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()
 
     def _validations_for_update_clean_solutions_dto(
             self, question_id: int,

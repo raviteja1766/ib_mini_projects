@@ -7,9 +7,11 @@ from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
 from content_management_portal.interactors.storages.dtos\
     import PrefilledCodeDto
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
 
-class CreateUpdatePrefilledCodesInteractor:
+class CreateUpdatePrefilledCodesInteractor(QuestionValidationMixin):
 
     def __init__(self, presenter: PresenterInterface,
                  prefilled_code_storage: PrefilledCodeStorageInterface,
@@ -21,7 +23,7 @@ class CreateUpdatePrefilledCodesInteractor:
     def create_update_prefilled_codes(
             self, question_id: int,
             prefilled_codes_dto: List[PrefilledCodeDto]):
-        self._validations_for_question(question_id=question_id)
+        self.validate_question_id(question_id=question_id)
         new_prefilled_codes_dto, update_prefilled_codes_dto =\
             self._get_new_and_update_prefilled_codes_dto(prefilled_codes_dto)
         if self._is_update_prefilled_codes_exist(update_prefilled_codes_dto):
@@ -50,13 +52,6 @@ class CreateUpdatePrefilledCodesInteractor:
             bool_field = True
 
         return bool_field
-
-    def _validations_for_question(self, question_id: int):
-
-        is_invalid_question = not self.question_storage\
-            .validate_question_id(question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()
 
     def _validations_for_update_prefilled_codes_dto(
             self, question_id: int,

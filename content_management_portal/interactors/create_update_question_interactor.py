@@ -5,9 +5,13 @@ from content_management_portal.interactors.presenters.presenter_interface\
 from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
 from content_management_portal.constants.enums import DescriptionType
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
 
-class CreateUpdateQuestionInteractor:
+class CreateUpdateQuestionInteractor(QuestionValidationMixin):
 
     def __init__(self, question_storage: QuestionStorageInterface,
                  presenter: PresenterInterface):
@@ -30,10 +34,8 @@ class CreateUpdateQuestionInteractor:
 
     def _validations_for_question_and_user(self, user_id, question_id):
 
-        is_invalid_question = not self.question_storage\
-            .validate_question_id(question_id=question_id)
-        if is_invalid_question:
-            self.presenter.raise_exception_for_invalid_question()
+        self.validate_question_id(question_id=question_id)
+
         question_user_id = self.question_storage\
             .get_user_to_question(question_id=question_id)
 
