@@ -22,3 +22,8 @@ class StorageInterface(ABC):
     def create_user_mcq_response(
             self, user_response_dto: UserResponseDTO) -> int:
         pass
+
+    @abstractmethod
+    def create_user_text_response(
+            self, user_response_dto: UserTextResponseDTO) -> int:
+        pass

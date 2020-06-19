@@ -26,3 +26,12 @@ def user_response_dto():
         question_id=1,
         option_id=1
     )
+
+@pytest.fixture()
+def user_text_response_dto():
+
+    return UserTextResponseDTO(
+        user_id=1,
+        question_id=1,
+        text="text"
+    )

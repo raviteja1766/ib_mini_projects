@@ -9,6 +9,13 @@ class UserResponseDTO:
 
 
 @dataclass()
+class UserTextResponseDTO:
+    user_id: int
+    question_id: int
+    text: str
+
+
+@dataclass()
 class FormStatusDto:
     form_id: int
     is_live: bool
