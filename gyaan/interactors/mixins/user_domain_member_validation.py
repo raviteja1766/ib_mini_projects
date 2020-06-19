@@ -3,10 +3,7 @@ from gyaan.interactors.storages.storage_interface \
     import StorageInterface
 
 
-class UserDomainMemberValidation:
-
-    def __init__(self, storage: StorageInterface):
-        self.storage = storage
+class UserDomainMemberValidationMixin:
 
     def validate_user_domain_member(self, user_id: int, domain_id: int):
 

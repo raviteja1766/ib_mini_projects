@@ -11,10 +11,10 @@ from gyaan.interactors.get_domain_posts_interactor \
     import DomainPostsInteractor
 from gyaan.constants.constants import *
 from gyaan.interactors.mixins.user_domain_member_validation \
-    import UserDomainMemberValidation
+    import UserDomainMemberValidationMixin
 
 
-class GetDomainWithPostsInteractor(UserDomainMemberValidation):
+class GetDomainWithPostsInteractor(UserDomainMemberValidationMixin):
 
     def __init__(self, storage: StorageInterface):
         self.storage = storage

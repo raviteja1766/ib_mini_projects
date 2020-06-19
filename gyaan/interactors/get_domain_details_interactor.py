@@ -6,10 +6,10 @@ from gyaan.exceptions.exceptions import (
     DomainDoesNotExist, UserNotDomainMember
 )
 from gyaan.interactors.mixins.user_domain_member_validation \
-    import UserDomainMemberValidation
+    import UserDomainMemberValidationMixin
 
 
-class GetDomainDetailsInteractor(UserDomainMemberValidation):
+class GetDomainDetailsInteractor(UserDomainMemberValidationMixin):
 
     def __init__(self, storage: StorageInterface):
         self.storage = storage

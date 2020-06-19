@@ -8,9 +8,9 @@ from gyaan.exceptions.exceptions \
 from gyaan.constants.constants import *
 from gyaan.interactors.get_posts_interactor import GetPostsInteractor
 from gyaan.interactors.mixins.user_domain_member_validation \
-    import UserDomainMemberValidation
+    import UserDomainMemberValidationMixin
 
-class DomainPostsInteractor(UserDomainMemberValidation):
+class DomainPostsInteractor(UserDomainMemberValidationMixin):
 
     def __init__(self, storage: StorageInterface):
         self.storage = storage
