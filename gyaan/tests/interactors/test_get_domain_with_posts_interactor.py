@@ -13,11 +13,14 @@ from gyaan.interactors.storages.storage_interface import StorageInterface
 from gyaan.interactors.presenters.presenter_interface \
     import PresenterInterface
 from gyaan.interactors.storages.dtos import CompletePostDetails
-from gyaan.exceptions.exceptions import DomainDoesNotExist
+from gyaan.exceptions.exceptions import *
 from gyaan.interactors.get_posts_interactor import GetPostsInteractor
 
 
-def test_domain_posts_interactor_given_invalid_domain_raises_exception():
+@patch.object(GetDomainDetailsInteractor, 'get_domain_details')
+@patch.object(DomainPostsInteractor, 'get_domain_posts')
+def test_domain_posts_interactor_given_invalid_domain_raises_exception(
+        get_domain_posts, get_domain_details):
 
     # Arrange
     domain_id = 1
@@ -25,7 +28,7 @@ def test_domain_posts_interactor_given_invalid_domain_raises_exception():
     offset = 1
     limit = 5
     storage = create_autospec(StorageInterface)
-    storage.validate_domain_id.side_effect = DomainDoesNotExist(domain_id=1)
+    get_domain_details.side_effect = DomainDoesNotExist(domain_id=1)
     interactor = GetDomainWithPostsInteractor(storage=storage)
     presenter = create_autospec(PresenterInterface)
     presenter.raise_exception_for_invalid_domain.side_effect = NotFound
@@ -39,13 +42,15 @@ def test_domain_posts_interactor_given_invalid_domain_raises_exception():
         )
 
     # Assert
-    storage.validate_domain_id.assert_called_once_with(domain_id=domain_id)
     presenter_kwargs_dict = \
         presenter.raise_exception_for_invalid_domain.call_args.kwargs
     domain_obj = presenter_kwargs_dict['error_obj']
     assert domain_id == domain_obj.domain_id
 
-def test_domain_posts_interactor_given_no_member_to_domain_raises_exception():
+@patch.object(GetDomainDetailsInteractor, 'get_domain_details')
+@patch.object(DomainPostsInteractor, 'get_domain_posts')
+def test_domain_posts_interactor_given_no_member_to_domain_raises_exception(
+        get_domain_posts, get_domain_details):
 
     # Arrange
     domain_id = 1
@@ -55,7 +60,8 @@ def test_domain_posts_interactor_given_no_member_to_domain_raises_exception():
     storage = create_autospec(StorageInterface)
     interactor = GetDomainWithPostsInteractor(storage=storage)
     presenter = create_autospec(PresenterInterface)
-    storage.is_user_following_domain.return_value = False
+    get_domain_details.side_effect = \
+        UserNotDomainMember(user_id=1, domain_id=1)
     presenter.raise_exception_for_user_not_domain_member\
         .side_effect = Forbidden
 
@@ -68,17 +74,16 @@ def test_domain_posts_interactor_given_no_member_to_domain_raises_exception():
         )
 
     # Assert
-    storage.validate_domain_id.assert_called_once_with(domain_id=domain_id)
-    storage.is_user_following_domain.assert_called_once_with(
-        user_id=user_id, domain_id=domain_id
-    )
     presenter_kwargs_dict = \
         presenter.raise_exception_for_user_not_domain_member.call_args.kwargs
     domain_obj = presenter_kwargs_dict['error_obj']
     assert domain_id == domain_obj.domain_id
     assert user_id == domain_obj.user_id
 
-def test_domain_posts_interactor_given_invalid_offset_raises_exception():
+@patch.object(GetDomainDetailsInteractor, 'get_domain_details')
+@patch.object(DomainPostsInteractor, 'get_domain_posts')
+def test_domain_posts_interactor_given_invalid_offset_raises_exception(
+        get_domain_posts, get_domain_details):
 
     # Arrange
     domain_id = 1
@@ -88,7 +93,7 @@ def test_domain_posts_interactor_given_invalid_offset_raises_exception():
     storage = create_autospec(StorageInterface)
     interactor = GetDomainWithPostsInteractor(storage=storage)
     presenter = create_autospec(PresenterInterface)
-    storage.is_user_following_domain.return_value = True
+    get_domain_posts.side_effect = InvalidOffsetValue
     presenter.raise_exception_for_invalid_offset_value\
         .side_effect = BadRequest
 
@@ -101,13 +106,12 @@ def test_domain_posts_interactor_given_invalid_offset_raises_exception():
         )
 
     # Assert
-    storage.validate_domain_id.assert_called_once_with(domain_id=domain_id)
-    storage.is_user_following_domain.assert_called_once_with(
-        user_id=user_id, domain_id=domain_id
-    )
     presenter.raise_exception_for_invalid_offset_value.assert_called_once()
 
-def test_domain_posts_interactor_given_invalid_limit_raises_exception():
+@patch.object(GetDomainDetailsInteractor, 'get_domain_details')
+@patch.object(DomainPostsInteractor, 'get_domain_posts')
+def test_domain_posts_interactor_given_invalid_limit_raises_exception(
+        get_domain_posts, get_domain_details):
 
     # Arrange
     domain_id = 1
@@ -117,7 +121,7 @@ def test_domain_posts_interactor_given_invalid_limit_raises_exception():
     storage = create_autospec(StorageInterface)
     interactor = GetDomainWithPostsInteractor(storage=storage)
     presenter = create_autospec(PresenterInterface)
-    storage.is_user_following_domain.return_value = True
+    get_domain_posts.side_effect = InvalidLimitValue
     presenter.raise_exception_for_invalid_limit_value\
         .side_effect = BadRequest
 
@@ -130,11 +134,8 @@ def test_domain_posts_interactor_given_invalid_limit_raises_exception():
         )
 
     # Assert
-    storage.validate_domain_id.assert_called_once_with(domain_id=domain_id)
-    storage.is_user_following_domain.assert_called_once_with(
-        user_id=user_id, domain_id=domain_id
-    )
     presenter.raise_exception_for_invalid_limit_value.assert_called_once()
+
 
 @patch.object(GetDomainDetailsInteractor, 'get_domain_details')
 @patch.object(DomainPostsInteractor, 'get_domain_posts')
@@ -154,7 +155,7 @@ def test_domain_posts_interactor_given_valid_details_returns_details(
     interactor = GetDomainWithPostsInteractor(storage=storage)
     presenter = create_autospec(PresenterInterface)
     storage.is_user_following_domain.return_value = True
-    
+
 
     # Act
     interactor_response = interactor.get_domain_with_posts_wrapper(
@@ -164,10 +165,6 @@ def test_domain_posts_interactor_given_valid_details_returns_details(
         )
 
     # Assert
-    storage.validate_domain_id.assert_called_once_with(domain_id=domain_id)
-    storage.is_user_following_domain.assert_called_once_with(
-        user_id=user_id, domain_id=domain_id
-    )
     presenter.get_domain_with_posts_response.assert_called_once_with(
         domain_with_posts_dto=domain_with_posts_dto
     )
