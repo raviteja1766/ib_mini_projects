@@ -32,6 +32,15 @@ class RoughSolutionDto:
     user_id: int
 
 @dataclass()
+class SolutionDto:
+    id: Optional[int]
+    file_name: str
+    language_type: CodeLanguageType
+    text_code: str
+    question_id: int
+    user_id: int
+
+@dataclass()
 class CodingQuestionDto:
     question_id: int
     short_text: str
