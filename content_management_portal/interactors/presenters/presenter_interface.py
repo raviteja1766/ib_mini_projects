@@ -1,6 +1,6 @@
 from abc import ABC
 from abc import abstractmethod
-from typing import List
+from typing import List, Any
 from common.dtos import UserAuthTokensDTO
 from content_management_portal.interactors.storages.dtos\
     import (
@@ -47,6 +47,11 @@ class PresenterInterface(ABC):
     @abstractmethod
     def get_response_for_create_update_rough_solutions(
             self, rough_solutions_dto: List[RoughSolutionDto]):
+        pass
+
+    @abstractmethod
+    def get_response_for_base_create_update_solutions_wrapper(
+            self, solutions_dto: List[Any]):
         pass
 
     @abstractmethod

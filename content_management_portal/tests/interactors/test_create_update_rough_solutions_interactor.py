@@ -24,17 +24,16 @@ def test_create_update_rough_solution_given_invalid_question_returns_exception(
     question_storage = create_autospec(QuestionStorageInterface)
     rough_storage = create_autospec(RoughSolutionStorageInterface)
     interactor = CreateUpdateRoughSolutionsInteractor(
-        question_storage=question_storage, presenter=presenter,
-        rough_storage=rough_storage
+        question_storage=question_storage, question_id=question_id,
+        rough_storage=rough_storage, solutions_dto=rough_solutions_dto
     )
     question_storage.validate_question_id.return_value = False
     presenter.raise_exception_for_invalid_question.side_effect = NotFound
 
     # Act
     with pytest.raises(NotFound):
-        interactor.create_update_rough_solutions(
-            question_id=question_id,
-            rough_solutions_dto=rough_solutions_dto
+        interactor.base_create_update_solutions_wrapper(
+            presenter=presenter
         )
 
     # Assert
@@ -61,17 +60,16 @@ def test_create_update_rough_solution_given_duplicate_rough_ids_returns_exceptio
     question_storage = create_autospec(QuestionStorageInterface)
     rough_storage = create_autospec(RoughSolutionStorageInterface)
     interactor = CreateUpdateRoughSolutionsInteractor(
-        question_storage=question_storage, presenter=presenter,
-        rough_storage=rough_storage
+        question_storage=question_storage, solutions_dto=rough_solutions_dto,
+        rough_storage=rough_storage, question_id=question_id
     )
     question_storage.validate_question_id.return_value = True
     presenter.raise_exception_for_duplicate_ids.side_effect = BadRequest
 
     # Act
     with pytest.raises(BadRequest):
-        interactor.create_update_rough_solutions(
-            question_id=question_id,
-            rough_solutions_dto=rough_solutions_dto
+        interactor.base_create_update_solutions_wrapper(
+            presenter=presenter
         )
 
     # Assert
@@ -91,8 +89,8 @@ def test_create_update_rough_solution_given_invalid_rough_solution_returns_excep
     question_storage = create_autospec(QuestionStorageInterface)
     rough_storage = create_autospec(RoughSolutionStorageInterface)
     interactor = CreateUpdateRoughSolutionsInteractor(
-        question_storage=question_storage, presenter=presenter,
-        rough_storage=rough_storage
+        question_storage=question_storage, solutions_dto=rough_solutions_dto,
+        rough_storage=rough_storage, question_id=question_id
     )
     question_storage.validate_question_id.return_value = True
     rough_storage.get_database_rough_solution_ids\
@@ -101,9 +99,8 @@ def test_create_update_rough_solution_given_invalid_rough_solution_returns_excep
 
     # Act
     with pytest.raises(NotFound):
-        interactor.create_update_rough_solutions(
-            question_id=question_id,
-            rough_solutions_dto=rough_solutions_dto
+        interactor.base_create_update_solutions_wrapper(
+            presenter=presenter
         )
 
     # Assert
@@ -127,8 +124,8 @@ def test_create_update_rough_solution_given_different_question_rough_solution_re
     question_storage = create_autospec(QuestionStorageInterface)
     rough_storage = create_autospec(RoughSolutionStorageInterface)
     interactor = CreateUpdateRoughSolutionsInteractor(
-        question_storage=question_storage, presenter=presenter,
-        rough_storage=rough_storage
+        question_storage=question_storage, solutions_dto=rough_solutions_dto,
+        rough_storage=rough_storage, question_id=question_id
     )
     question_storage.validate_question_id.return_value = True
     rough_storage.get_database_rough_solution_ids\
@@ -139,9 +136,8 @@ def test_create_update_rough_solution_given_different_question_rough_solution_re
 
     # Act
     with pytest.raises(Forbidden):
-        interactor.create_update_rough_solutions(
-            question_id=question_id,
-            rough_solutions_dto=rough_solutions_dto
+        interactor.base_create_update_solutions_wrapper(
+            presenter=presenter
         )
 
     # Assert
@@ -180,8 +176,8 @@ def test_create_update_rough_solution_given_valid_details_returns_details(
     question_storage = create_autospec(QuestionStorageInterface)
     rough_storage = create_autospec(RoughSolutionStorageInterface)
     interactor = CreateUpdateRoughSolutionsInteractor(
-        question_storage=question_storage, presenter=presenter,
-        rough_storage=rough_storage
+        question_storage=question_storage, solutions_dto=rough_solutions_dto,
+        rough_storage=rough_storage, question_id=question_id
     )
     question_storage.validate_question_id.return_value = True
     rough_storage.get_database_rough_solution_ids\
@@ -190,13 +186,12 @@ def test_create_update_rough_solution_given_valid_details_returns_details(
         .return_value = rough_solution_question_ids
     rough_storage.get_rough_solutions_to_question\
         .return_value = storage_rough_solutions_dto
-    presenter.get_response_for_create_update_rough_solutions\
+    presenter.get_response_for_base_create_update_solutions_wrapper\
         .return_value = rough_solutions_dto_response
 
     # Act
-    interactor_response = interactor.create_update_rough_solutions(
-        question_id=question_id,
-        rough_solutions_dto=rough_solutions_dto
+    interactor_response = interactor.base_create_update_solutions_wrapper(
+        presenter=presenter
     )
 
     # Assert
@@ -212,9 +207,9 @@ def test_create_update_rough_solution_given_valid_details_returns_details(
     rough_storage.update_rough_solutions.assert_called_once_with(
         question_id=question_id,
         rough_solutions_dto=rough_solutions_dto)
-    presenter.get_response_for_create_update_rough_solutions\
+    presenter.get_response_for_base_create_update_solutions_wrapper\
         .assert_called_once_with(
-            rough_solutions_dto=storage_rough_solutions_dto
+            solutions_dto=storage_rough_solutions_dto
         )
 
 
@@ -228,19 +223,18 @@ def test_create_update_rough_solution_given_create_details_returns_details(
     question_storage = create_autospec(QuestionStorageInterface)
     rough_storage = create_autospec(RoughSolutionStorageInterface)
     interactor = CreateUpdateRoughSolutionsInteractor(
-        question_storage=question_storage, presenter=presenter,
-        rough_storage=rough_storage
+        question_storage=question_storage, question_id=question_id,
+        rough_storage=rough_storage, solutions_dto=new_rough_solutions_dto
     )
     question_storage.validate_question_id.return_value = True
     rough_storage.get_rough_solutions_to_question\
         .return_value = update_rough_solutions_dto
-    presenter.get_response_for_create_update_rough_solutions\
+    presenter.get_response_for_base_create_update_solutions_wrapper\
         .return_value = rough_solutions_dto_response
 
     # Act
-    interactor_response = interactor.create_update_rough_solutions(
-        question_id=question_id,
-        rough_solutions_dto=new_rough_solutions_dto
+    interactor_response = interactor.base_create_update_solutions_wrapper(
+        presenter=presenter
     )
 
     # Assert
@@ -249,7 +243,7 @@ def test_create_update_rough_solution_given_create_details_returns_details(
     )
     rough_storage.create_rough_solutions.assert_called_once_with(
         rough_solutions_dto=new_rough_solutions_dto)
-    presenter.get_response_for_create_update_rough_solutions\
+    presenter.get_response_for_base_create_update_solutions_wrapper\
         .assert_called_once_with(
-            rough_solutions_dto=update_rough_solutions_dto
+            solutions_dto=update_rough_solutions_dto
         )

@@ -7,14 +7,13 @@ from content_management_portal.interactors.storages\
     .question_storage_interface import QuestionStorageInterface
 from content_management_portal.interactors.storages.dtos\
     import CleanSolutionDto
-from content_management_portal.interactors\
-    .base_create_update_solutions_interactor\
-    import BaseCreateUpdateSolutionsInteractor
+from content_management_portal.interactors.mixins.question_validation \
+    import QuestionValidationMixin
 
 
-class CreateUpdateCleanSolutionsInteractor():
+class CreateUpdateCleanSolutionsInteractor(QuestionValidationMixin):
 
-    def __init__(self, question_id: int,
+    def __init__(self, presenter: PresenterInterface,
                  clean_solution_storage: CleanSolutionStorageInterface,
                  question_storage: QuestionStorageInterface):
         self.presenter = presenter

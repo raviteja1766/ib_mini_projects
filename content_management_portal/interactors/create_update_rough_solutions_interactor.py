@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 from content_management_portal.interactors.presenters.presenter_interface\
     import PresenterInterface
 from content_management_portal.interactors.storages\
@@ -17,11 +17,10 @@ from content_management_portal.interactors\
 class CreateUpdateRoughSolutionsInteractor(
         BaseCreateUpdateSolutionsInteractor):
 
-    def __init__(self, question_id: int,
+    def __init__(self, question_id: int, solutions_dto: List[Any],
                  rough_storage: RoughSolutionStorageInterface,
                  question_storage: QuestionStorageInterface):
-        self.question_id = question_id
-        self.question_storage = question_storage
+        super().__init__(question_id, solutions_dto, question_storage)
         self.rough_storage = rough_storage
 
 

@@ -31,8 +31,9 @@ class BaseCreateUpdateSolutionsInteractor(
 
         try:
             storage_solutions_dto = self.base_create_update_solutions()
-            return presenter.base_create_update_solutions_response(
-                solutions_dto=storage_solutions_dto)
+            return presenter\
+                .get_response_for_base_create_update_solutions_wrapper(
+                    solutions_dto=storage_solutions_dto)
         except InvalidQuestionId:
             presenter.raise_exception_for_invalid_question()
         except DuplicateIds:
@@ -45,9 +46,11 @@ class BaseCreateUpdateSolutionsInteractor(
 
     def base_create_update_solutions(self):
 
-        self.validate_question_id(question_id=self.question_id)
+        self.validate_question(question_id=self.question_id)
         new_solutions_dto, update_solutions_dto = \
-            self._get_new_and_update_solutions_dto(self.solutions_dto)
+            self._get_new_and_update_solutions_dto(
+                solutions_dto=self.solutions_dto
+            )
 
         if self._is_update_solutions_exist(update_solutions_dto):
             self._update_solutions_dto(solutions_dto=update_solutions_dto)
@@ -99,7 +102,7 @@ class BaseCreateUpdateSolutionsInteractor(
         return self._is_solutions_exist(solutions_dto)
 
     @staticmethod
-    def _is_solutions_exist(solutions_dto: List[solutions_dto]):
+    def _is_solutions_exist(solutions_dto: List[Any]):
         is_solutions_exists = len(solutions_dto)
         bool_field = False
 
