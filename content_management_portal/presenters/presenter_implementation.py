@@ -3,7 +3,7 @@ from django_swagger_utils.drf_server.exceptions import (
 )
 from abc import ABC
 from abc import abstractmethod
-from typing import List
+from typing import List, Any
 from common.dtos import UserAuthTokensDTO
 from content_management_portal.interactors.presenters.presenter_interface\
     import PresenterInterface
@@ -74,9 +74,10 @@ class PresenterImplementation(PresenterInterface):
 
         raise NotFound(*INVALID_ROUGH_SOLUTION_EXCEPTION)
 
-    def get_response_for_create_update_rough_solutions(
-            self, rough_solutions_dto: List[RoughSolutionDto]):
+    def get_response_for_base_create_update_solutions_wrapper(
+            self, solutions_dto: List[Any]):
 
+        rough_solutions_dto = solutions_dto
         question_id = rough_solutions_dto[0].question_id
         return {
             "question_id": question_id,

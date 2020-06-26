@@ -10,10 +10,11 @@ def check_for_none_values_of_offset_and_limit(offset, limit):
 
 def validate_offset(offset, total_questions_count):
 
+    is_empty_questions = not total_questions_count
+    if is_empty_questions:
+        return True
+
     if offset < 1 or offset > total_questions_count:
-        is_empty_questions = not total_questions_count
-        if is_empty_questions:
-            return True
         return False
     return True
 

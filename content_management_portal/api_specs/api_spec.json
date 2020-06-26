@@ -951,15 +951,13 @@
                         "name": "offset",
                         "in": "query",
                         "description": "Question Starting Position",
-                        "type": "integer",
-                        "required": true
+                        "type": "integer"
                     },
                     {
                         "name": "limit",
                         "in": "query",
                         "description": "Number of questions from Offset Position",
-                        "type": "integer",
-                        "required": true
+                        "type": "integer"
                     }
                 ],
                 "security": [{

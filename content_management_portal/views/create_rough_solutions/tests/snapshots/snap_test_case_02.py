@@ -7,24 +7,21 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
-snapshots['TestCase01CreateQuestionAPITestCase::test_case status'] = 201
+snapshots['TestCase01CreateRoughSolutionsAPITestCase::test_case status'] = 404
 
-snapshots['TestCase01CreateQuestionAPITestCase::test_case body'] = {
-    'problem_description': {
-        'content': 'string',
-        'content_type': 'MARKDOWN'
-    },
-    'question_id': 1,
-    'short_text': 'string'
+snapshots['TestCase01CreateRoughSolutionsAPITestCase::test_case body'] = {
+    'http_status_code': 404,
+    'res_status': 'INVALID_ROUGH_SOLUTION_EXCEPTION',
+    'response': 'Please send valid rough solution'
 }
 
-snapshots['TestCase01CreateQuestionAPITestCase::test_case header_params'] = {
+snapshots['TestCase01CreateRoughSolutionsAPITestCase::test_case header_params'] = {
     'content-language': [
         'Content-Language',
         'en'
     ],
     'content-length': [
-        '116',
+        '123',
         'Content-Length'
     ],
     'content-type': [

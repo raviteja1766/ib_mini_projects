@@ -7,24 +7,21 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
-snapshots['TestCase01CreateQuestionAPITestCase::test_case status'] = 201
+snapshots['TestCase01GetCodingQuestionsDetailsAPITestCase::test_case status'] = 400
 
-snapshots['TestCase01CreateQuestionAPITestCase::test_case body'] = {
-    'problem_description': {
-        'content': 'string',
-        'content_type': 'MARKDOWN'
-    },
-    'question_id': 1,
-    'short_text': 'string'
+snapshots['TestCase01GetCodingQuestionsDetailsAPITestCase::test_case body'] = {
+    'http_status_code': 400,
+    'res_status': 'INVALID_LIMIT_LENGTH',
+    'response': 'limit should be less than total number of questions  greater than zero'
 }
 
-snapshots['TestCase01CreateQuestionAPITestCase::test_case header_params'] = {
+snapshots['TestCase01GetCodingQuestionsDetailsAPITestCase::test_case header_params'] = {
     'content-language': [
         'Content-Language',
         'en'
     ],
     'content-length': [
-        '116',
+        '149',
         'Content-Length'
     ],
     'content-type': [

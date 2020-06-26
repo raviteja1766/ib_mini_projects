@@ -8,13 +8,50 @@ from content_management_portal.utils.custom_test_utils_2 \
     import CustomTestUtils
 
 REQUEST_BODY = """
-{}
+[
+  {
+    "rough_solution_id": null,
+    "file_name": "string3",
+    "language": "PYTHON",
+    "solution_content": "string"
+  },
+  {
+    "rough_solution_id": 1,
+    "file_name": "string2",
+    "language": "PYTHON",
+    "solution_content": "string"
+  },
+  {
+    "rough_solution_id": null,
+    "file_name": "string4",
+    "language": "PYTHON",
+    "solution_content": "string"
+  },
+  {
+    "rough_solution_id": 2,
+    "file_name": "string2",
+    "language": "PYTHON",
+    "solution_content": "string"
+  },
+  {
+    "rough_solution_id": 3,
+    "file_name": "file_name_3",
+    "language": "C",
+    "solution_content": "code_3"
+  },
+  {
+    "rough_solution_id": 4,
+    "file_name": "file_name_4",
+    "language": "RUBY",
+    "solution_content": "code_4"
+  }
+]
 """
 
 TEST_CASE = {
     "request": {
-        "path_params": {},
-        "query_params": {"offset": -1, "limit": 4},
+        "path_params": {"question_id": "1"},
+        "query_params": {},
         "header_params": {},
         "securities": {"oauth": {"tokenUrl": "http://auth.ibtspl.com/oauth2/", "flow": "password", "scopes": ["superuser"], "type": "oauth2"}},
         "body": REQUEST_BODY,
@@ -22,7 +59,7 @@ TEST_CASE = {
 }
 
 
-class TestCase01GetCodingQuestionsDetailsAPITestCase(CustomTestUtils):
+class TestCase01CreateRoughSolutionsAPITestCase(CustomTestUtils):
     app_name = APP_NAME
     operation_name = OPERATION_NAME
     request_method = REQUEST_METHOD
@@ -30,14 +67,13 @@ class TestCase01GetCodingQuestionsDetailsAPITestCase(CustomTestUtils):
     test_case_dict = TEST_CASE
 
     def setupUser(self, username, password):
-        super(TestCase01GetCodingQuestionsDetailsAPITestCase, self).setupUser(
+        super(TestCase01CreateRoughSolutionsAPITestCase, self).setupUser(
             username=username, password=password
         )
         self.reset_factory_sequence()
         self.create_users()
         self.create_questions()
-        self.create_clean_solutions()
-        self.create_tests()
+        self.create_rough_solutions()
 
     def test_case(self):
         self.default_test_case() # Returns response object.

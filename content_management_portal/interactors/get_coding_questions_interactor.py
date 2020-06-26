@@ -27,7 +27,7 @@ class GetCodingQuestionsInteractors:
         coding_questions_dto = self.question_storage\
             .get_coding_questions_details_dto(offset=offset, limit=limit)
         checked_coding_questions_dto = [
-            self._check_and_get_coding_question_dto(question_dto)    
+            self._check_and_get_coding_question_dto(question_dto)
             for question_dto in coding_questions_dto
         ]
         return self.presenter.get_response_for_get_coding_questions_details(
@@ -38,7 +38,7 @@ class GetCodingQuestionsInteractors:
 
     @staticmethod
     def _check_and_get_coding_question_dto(question_dto):
-        
+
         zero = 0
         return CodingQuestionDto(
             question_id=question_dto.question_id,
@@ -52,7 +52,7 @@ class GetCodingQuestionsInteractors:
 
     def _validations_for_offset_and_limit(
             self, offset, limit, questions_count):
-        
+
         is_invalid_offset = not validate_offset(offset, questions_count)
         if is_invalid_offset:
             self.presenter.raise_exception_for_offset_exception()

@@ -7,11 +7,12 @@ from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 
 REQUEST_BODY = """
 {
-    "short_text": "string",
-    "problem_description": {
-        "text_type": "MARKDOWN",
-        "text_description": "string"
-    }
+  "question_id": null,
+  "short_text": "string",
+  "problem_description": {
+    "content_type": "MARKDOWN",
+    "content": "string"
+  }
 }
 """
 

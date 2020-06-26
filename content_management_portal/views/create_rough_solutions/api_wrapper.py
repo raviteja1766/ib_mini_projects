@@ -25,14 +25,16 @@ def api_wrapper(*args, **kwargs):
     question_storage = QuestionStorageImplementation()
     rough_storage = RoughSolutionStorageImplementation()
     presenter = PresenterImplementation()
-    interactor = CreateUpdateRoughSolutionsInteractor(
-        question_storage=question_storage, presenter=presenter,
-        rough_storage=rough_storage)
     rough_solutions_dto = _convert_rough_solution_dict_to_dto(
         user_id=user.id, question_id=question_id,
-        rough_solutions_dict=rough_solutions_dict)
+        rough_solutions_dict=rough_solutions_dict
+    )
+    interactor = CreateUpdateRoughSolutionsInteractor(
+        question_id=question_id, solutions_dto=rough_solutions_dto,
+        question_storage=question_storage, rough_storage=rough_storage
+    )
     interactor_response = interactor\
-        .create_update_rough_solutions(question_id,rough_solutions_dto)
+        .base_create_update_solutions_wrapper(presenter=presenter)
 
     data = json.dumps(interactor_response)
     response = HttpResponse(data, status=201)

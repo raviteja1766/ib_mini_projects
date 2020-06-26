@@ -44,10 +44,10 @@ class PresenterInterface(ABC):
     def raise_exception_for_invalid_rough_solution(self):
         pass
 
-    @abstractmethod
-    def get_response_for_create_update_rough_solutions(
-            self, rough_solutions_dto: List[RoughSolutionDto]):
-        pass
+    # @abstractmethod
+    # def get_response_for_create_update_rough_solutions(
+    #         self, rough_solutions_dto: List[RoughSolutionDto]):
+    #     pass
 
     @abstractmethod
     def get_response_for_base_create_update_solutions_wrapper(

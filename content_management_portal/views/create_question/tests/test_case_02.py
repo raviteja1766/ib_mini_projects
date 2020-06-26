@@ -4,21 +4,23 @@
 
 from django_swagger_utils.utils.test import CustomAPITestCase
 from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
+from content_management_portal.utils.custom_test_utils_2 \
+    import CustomTestUtils
 
 REQUEST_BODY = """
-[
-  {
-    "rough_solution_id": null,
-    "file_name": "string",
-    "language": "PYTHON",
-    "solution_content": "string"
+{
+  "question_id": 1,
+  "short_text": "string",
+  "problem_description": {
+    "content_type": "MARKDOWN",
+    "content": "string"
   }
-]
+}
 """
 
 TEST_CASE = {
     "request": {
-        "path_params": {"question_id": "1234"},
+        "path_params": {},
         "query_params": {},
         "header_params": {},
         "securities": {"oauth": {"tokenUrl": "http://auth.ibtspl.com/oauth2/", "flow": "password", "scopes": ["superuser"], "type": "oauth2"}},
@@ -27,12 +29,20 @@ TEST_CASE = {
 }
 
 
-class TestCase01CreateRoughSolutionsAPITestCase(CustomAPITestCase):
+class TestCase01CreateQuestionAPITestCase(CustomTestUtils):
     app_name = APP_NAME
     operation_name = OPERATION_NAME
     request_method = REQUEST_METHOD
     url_suffix = URL_SUFFIX
     test_case_dict = TEST_CASE
+
+    def setupUser(self, username, password):
+        super(TestCase01CreateQuestionAPITestCase, self).setupUser(
+            username=username, password=password
+        )
+        self.reset_factory_sequence()
+        self.create_users()
+        self.create_questions()
 
     def test_case(self):
         self.default_test_case() # Returns response object.

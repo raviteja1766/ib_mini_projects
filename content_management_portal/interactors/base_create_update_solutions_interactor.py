@@ -123,8 +123,7 @@ class BaseCreateUpdateSolutionsInteractor(
         return new_solutions_dto, update_solutions_dto
 
     @staticmethod
-    def _check_for_update_solution_dto(
-            solution_dto: SolutionDto):
+    def _check_for_update_solution_dto(solution_dto: SolutionDto):
 
         solution_id = solution_dto.id
         is_update_solution = solution_id

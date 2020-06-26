@@ -20,8 +20,10 @@ def test_get_response_for_create_update_rough_solutions(
         ]
     }
     # Act
-    actual_response = presenter.get_response_for_create_update_rough_solutions(
-        rough_solutions_dto=rough_solutions_dtos)
+    actual_response = \
+        presenter.get_response_for_base_create_update_solutions_wrapper(
+            solutions_dto=rough_solutions_dtos
+        )
 
     # Assert
     assert actual_response == expected_response

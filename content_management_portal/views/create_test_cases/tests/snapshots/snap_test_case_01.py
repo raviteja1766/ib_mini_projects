@@ -7,29 +7,26 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
-snapshots['TestCase01CreateQuestionAPITestCase::test_case status'] = 201
+snapshots['TestCase01CreateTestCasesAPITestCase::test_case status'] = 400
 
-snapshots['TestCase01CreateQuestionAPITestCase::test_case body'] = {
-    'problem_description': {
-        'content': 'string',
-        'content_type': 'MARKDOWN'
-    },
-    'question_id': 1,
-    'short_text': 'string'
+snapshots['TestCase01CreateTestCasesAPITestCase::test_case body'] = {
+    'test_case_number': [
+        'This field is required.'
+    ]
 }
 
-snapshots['TestCase01CreateQuestionAPITestCase::test_case header_params'] = {
+snapshots['TestCase01CreateTestCasesAPITestCase::test_case header_params'] = {
     'content-language': [
         'Content-Language',
         'en'
     ],
     'content-length': [
-        '116',
+        '48',
         'Content-Length'
     ],
     'content-type': [
         'Content-Type',
-        'text/html; charset=utf-8'
+        'application/json'
     ],
     'vary': [
         'Accept-Language, Origin, Cookie',
