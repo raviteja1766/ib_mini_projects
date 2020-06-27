@@ -12,7 +12,7 @@ snapshots['TestCase01LoginUserAPITestCase::test_case status'] = 401
 snapshots['TestCase01LoginUserAPITestCase::test_case body'] = {
     'http_status_code': 401,
     'res_status': 'INVALID_USERNAME_EXCEPTION',
-    'response': 'Please send valid username'
+    'response': 'Invalid User Credentials'
 }
 
 snapshots['TestCase01LoginUserAPITestCase::test_case header_params'] = {
@@ -21,7 +21,7 @@ snapshots['TestCase01LoginUserAPITestCase::test_case header_params'] = {
         'en'
     ],
     'content-length': [
-        '111',
+        '109',
         'Content-Length'
     ],
     'content-type': [

@@ -7,13 +7,12 @@ from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 
 REQUEST_BODY = """
 [
-    {
-        "file_name": "string",
-        "body_text": {
-            "language_type": "PYTHON",
-            "text_code": "string"
-        }
-    }
+  {
+    "clean_solution_id": null,
+    "file_name": "string",
+    "language": "PYTHON",
+    "solution_content": "string"
+  }
 ]
 """
 

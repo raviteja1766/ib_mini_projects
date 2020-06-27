@@ -7,9 +7,13 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
-snapshots['TestCase01CreateHintsToQuestionAPITestCase::test_case status'] = 200
+snapshots['TestCase01CreateHintsToQuestionAPITestCase::test_case status'] = 404
 
-snapshots['TestCase01CreateHintsToQuestionAPITestCase::test_case body'] = b''
+snapshots['TestCase01CreateHintsToQuestionAPITestCase::test_case body'] = {
+    'http_status_code': 404,
+    'res_status': 'INVALID_QUESTION_EXCEPTION',
+    'response': 'Please send valid question id'
+}
 
 snapshots['TestCase01CreateHintsToQuestionAPITestCase::test_case header_params'] = {
     'content-language': [
@@ -17,7 +21,7 @@ snapshots['TestCase01CreateHintsToQuestionAPITestCase::test_case header_params']
         'en'
     ],
     'content-length': [
-        '0',
+        '114',
         'Content-Length'
     ],
     'content-type': [

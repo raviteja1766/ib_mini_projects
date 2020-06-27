@@ -6,19 +6,18 @@ from django_swagger_utils.utils.test import CustomAPITestCase
 from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 
 REQUEST_BODY = """
-[
-    {
-        "title": "string",
-        "description_text": {
-            "description_type": "HTML",
-            "content": "string"
-        },
-        "complexity_analysis": {
-            "text_type": "HTML",
-            "content": "string"
-        }
+{
+    "solution_approach_id": 0,
+    "title": "string",
+    "description": {
+        "content_type": "HTML",
+        "content": "string"
+    },
+    "complexity_analysis": {
+        "content_type": "HTML",
+        "content": "string"
     }
-]
+}
 """
 
 TEST_CASE = {

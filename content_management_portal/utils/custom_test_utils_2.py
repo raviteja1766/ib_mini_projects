@@ -55,12 +55,12 @@ class CustomTestUtils(CustomAPITestCase):
             TestCaseFactory(question=question, score=30, order_id=3)
             TestCaseFactory(question=question, score=40, order_id=4)
 
-    def create_hints(self):
+    def create_solution_approach(self):
         questions = list(Question.objects.filter(user_id=1))
         for question in questions:
             SolutionApproachFactory(question=question)
 
-    def create_solution_approach(self):
+    def create_hints(self):
         questions = list(Question.objects.filter(user_id=1))
         for question in questions:
             HintFactory(question=question, order_id=1)

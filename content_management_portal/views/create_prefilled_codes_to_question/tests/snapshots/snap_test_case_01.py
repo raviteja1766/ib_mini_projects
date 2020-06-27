@@ -7,21 +7,13 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
-snapshots['TestCase01CreatePrefilledCodesToQuestionAPITestCase::test_case status'] = 400
+snapshots['TestCase01CreatePrefilledCodesToQuestionAPITestCase::test_case status'] = 404
 
-snapshots['TestCase01CreatePrefilledCodesToQuestionAPITestCase::test_case body'] = [
-    {
-        'file_name': [
-            'This field is required.'
-        ],
-        'language': [
-            'This field is required.'
-        ],
-        'solution_content': [
-            'This field is required.'
-        ]
-    }
-]
+snapshots['TestCase01CreatePrefilledCodesToQuestionAPITestCase::test_case body'] = {
+    'http_status_code': 404,
+    'res_status': 'INVALID_QUESTION_EXCEPTION',
+    'response': 'Please send valid question id'
+}
 
 snapshots['TestCase01CreatePrefilledCodesToQuestionAPITestCase::test_case header_params'] = {
     'content-language': [
@@ -29,12 +21,12 @@ snapshots['TestCase01CreatePrefilledCodesToQuestionAPITestCase::test_case header
         'en'
     ],
     'content-length': [
-        '129',
+        '114',
         'Content-Length'
     ],
     'content-type': [
         'Content-Type',
-        'application/json'
+        'text/html; charset=utf-8'
     ],
     'vary': [
         'Accept-Language, Origin, Cookie',

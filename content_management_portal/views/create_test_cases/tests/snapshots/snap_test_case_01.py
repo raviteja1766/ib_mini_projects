@@ -7,12 +7,12 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
-snapshots['TestCase01CreateTestCasesAPITestCase::test_case status'] = 400
+snapshots['TestCase01CreateTestCasesAPITestCase::test_case status'] = 404
 
 snapshots['TestCase01CreateTestCasesAPITestCase::test_case body'] = {
-    'test_case_number': [
-        'This field is required.'
-    ]
+    'http_status_code': 404,
+    'res_status': 'INVALID_QUESTION_EXCEPTION',
+    'response': 'Please send valid question id'
 }
 
 snapshots['TestCase01CreateTestCasesAPITestCase::test_case header_params'] = {
@@ -21,12 +21,12 @@ snapshots['TestCase01CreateTestCasesAPITestCase::test_case header_params'] = {
         'en'
     ],
     'content-length': [
-        '48',
+        '114',
         'Content-Length'
     ],
     'content-type': [
         'Content-Type',
-        'application/json'
+        'text/html; charset=utf-8'
     ],
     'vary': [
         'Accept-Language, Origin, Cookie',

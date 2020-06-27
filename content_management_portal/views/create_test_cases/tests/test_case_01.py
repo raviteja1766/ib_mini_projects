@@ -7,11 +7,12 @@ from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 
 REQUEST_BODY = """
 {
-    "test_case_id": 1,
-    "input_text": "string",
-    "output_text": "string",
-    "score": 1,
-    "is_hidden": true
+  "test_case_id": 0,
+  "input": "string",
+  "output": "string",
+  "score": 0,
+  "is_hidden": true,
+  "test_case_number": 0
 }
 """
 
@@ -20,7 +21,14 @@ TEST_CASE = {
         "path_params": {"question_id": "1234"},
         "query_params": {},
         "header_params": {},
-        "securities": {"oauth": {"tokenUrl": "http://auth.ibtspl.com/oauth2/", "flow": "password", "scopes": ["superuser"], "type": "oauth2"}},
+        "securities": {
+            "oauth": {
+                "tokenUrl": "http://auth.ibtspl.com/oauth2/",
+                "flow": "password",
+                "scopes": ["superuser"],
+                "type": "oauth2"
+            }
+        },
         "body": REQUEST_BODY,
     },
 }
