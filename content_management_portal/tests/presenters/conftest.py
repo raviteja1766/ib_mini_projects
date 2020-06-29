@@ -1,6 +1,5 @@
 import pytest
 import datetime
-from common.dtos import UserAuthTokensDTO
 from content_management_portal.interactors.storages.dtos import (
     QuestionDto, RoughSolutionDto, TestCaseDto, PrefilledCodeDto,
     CleanSolutionDto, SolutionApproachDto, HintDto
@@ -9,14 +8,6 @@ from content_management_portal.constants.enums import (
     CodeLanguageType, DescriptionType
 )
 
-@pytest.fixture()
-def user_auth_token_dto():
-    userauthtoken = UserAuthTokensDTO(
-        user_id=1, access_token="1OfS6IZWCum8Jgpudp6FcAnqfKAb7t",
-        refresh_token="SLnTl4l4z07mW7s96AlBcuXBhvVeid",
-        expires_in=datetime.datetime(5189, 4, 11, 9, 51, 25, 278085)
-    )
-    return userauthtoken
 
 @pytest.fixture()
 def question_dto():

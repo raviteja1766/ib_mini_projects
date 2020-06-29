@@ -1,0 +1,98 @@
+{
+    "swagger": "2.0",
+    "host": "localhost:8080",
+    "basePath": "/user_app/",
+    "info": {
+        "version": "1.0.0",
+        "title": "User Authentication App",
+        "description": "Simple API to post and comment in social app"
+    },
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "definitions": {
+        "UserLoginRequestBody": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "username", "password"
+            ]
+        },
+        "UserLoginResponseBody": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "expires_in": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            },
+            "required": ["access_token", "refresh_token",
+                "expires_in", "user_id"
+            ]
+        }
+    },
+    "parameters": {
+        "UserParametarize": {
+            "name": "UserCredentials",
+            "in": "body",
+            "description": "User to register",
+            "schema": {
+                "$ref": "#/definitions/UserLoginRequestBody"
+            },
+            "required": true
+        }
+    },
+    "responses": {
+        "InvalidLoginResponse": {
+            "description": "Unauthorised"
+        },
+        "AccessTokenResponse": {
+            "description": "Succesful",
+            "schema": {
+                "$ref": "#/definitions/UserLoginResponseBody"
+            }
+        }
+    },
+    "paths": {
+        "/login/v1/": {
+            "post": {
+                "operationId": "login_user",
+                "summary": "Create user",
+                "description": "Create user in database",
+                "parameters": [{
+                    "$ref": "#/parameters/UserParametarize"
+                }],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/AccessTokenResponse"
+                    },
+                    "401": {
+                        "$ref": "#/responses/InvalidLoginResponse"
+                    }
+                }
+            }
+        }
+    }
+}

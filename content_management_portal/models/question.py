@@ -1,5 +1,4 @@
 from django.db import models
-from .user import User
 from content_management_portal.constants.enums import DescriptionType
 
 
@@ -10,4 +9,4 @@ class Question(models.Model):
     )
     description = models.TextField()
     created_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.IntegerField()

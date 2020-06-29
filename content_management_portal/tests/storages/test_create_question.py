@@ -10,8 +10,7 @@ from content_management_portal.constants.enums import DescriptionType
 
 @pytest.mark.django_db
 @freeze_time("2012-01-13")
-def test_create_given_valid_details_returns_question_dto(
-        question_dto, create_users):
+def test_create_given_valid_details_returns_question_dto(question_dto):
 
     # Arrange
     created_question_dto = question_dto

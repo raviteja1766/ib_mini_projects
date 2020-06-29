@@ -6,8 +6,9 @@ REQUEST_METHOD = "get"
 URL_SUFFIX = "coding_questions/{question_id}/v1/"
 
 from .test_case_01 import TestCase01GetQuestionCompleteDetailsAPITestCase
-from .test_case_02 import TestCase01GetQuestionCompleteDetailsAPITestCase
+from .test_case_02 import TestCase02GetQuestionCompleteDetailsAPITestCase
 
 __all__ = [
-    "TestCase01GetQuestionCompleteDetailsAPITestCase"
+    "TestCase01GetQuestionCompleteDetailsAPITestCase",
+    "TestCase02GetQuestionCompleteDetailsAPITestCase"
 ]

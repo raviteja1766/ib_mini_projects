@@ -3,7 +3,6 @@ from django.contrib.auth.admin import UserAdmin
 from content_management_portal.models import *
 
 
-admin.site.register(User, UserAdmin)
 admin.site.register(Question)
 admin.site.register(RoughSolution)
 admin.site.register(CleanSolution)
