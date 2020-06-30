@@ -1,5 +1,7 @@
+
 from typing import List
 from content_management_portal.dtos.dtos import UserDto
+from user_app.exceptions.exceptions import DuplicateUserIds, InvalidUserIds
 
 
 class AuthService:
@@ -10,6 +12,7 @@ class AuthService:
         return ServiceInterface()
 
     def get_user_dtos(self, user_ids: List[int]):
+
         user_dtos = self.interface.get_user_dtos(user_ids=user_ids)
 
         user_dtos = [
