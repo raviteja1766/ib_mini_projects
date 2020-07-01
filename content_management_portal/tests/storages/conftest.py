@@ -2,7 +2,7 @@ import pytest
 from datetime import datetime
 from freezegun import freeze_time
 from content_management_portal.models import (
-    User, Question, RoughSolution, TestCase, PrefilledCode,
+    Question, RoughSolution, TestCase, PrefilledCode,
     CleanSolution, SolutionApproach, Hint
 )
 from content_management_portal.interactors.storages.dtos import *
@@ -12,36 +12,8 @@ from content_management_portal.constants.enums import (
 
 
 @pytest.fixture()
-def create_users():
-
-    users_list = [
-        {
-            'username': "username1",
-            'password': "Mdjsfs@713"
-        },
-        {
-            'username': "username2",
-            'password': "Hksu@761"
-        }
-    ]
-    user_instances_list = []
-    users_password_dict = {}
-    for user in users_list:
-        users_password_dict[user['username']] = user['password']
-        user_instances_list.append(
-            User(username=user['username'])
-        )
-
-    User.objects.bulk_create(user_instances_list)
-    user_objs = list(User.objects.all())
-    for user in user_objs:
-        password = users_password_dict[user.username]
-        user.set_password(password)
-    User.objects.bulk_update(user_objs, ['password'])
-
-@pytest.fixture()
 @freeze_time("2012-01-13")
-def create_questions(create_users):
+def create_questions():
 
     Question.objects.bulk_create([
         Question(

@@ -28,9 +28,6 @@ class PresenterImplementation(PresenterInterface):
             "expires_in": str(user_auth_token_dto.expires_in)
         }
 
-    def raise_exception_for_invalid_question(self):
-
-        raise NotFound(*INVALID_QUESTION_EXCEPTION)
 
     def raise_exception_for_invalid_username(self):
 
@@ -39,6 +36,10 @@ class PresenterImplementation(PresenterInterface):
     def raise_exception_for_invalid_password(self):
 
         raise Unauthorized(*INVALID_PASSWORD_EXCEPTION)
+
+    def raise_exception_for_invalid_question(self):
+
+        raise NotFound(*INVALID_QUESTION_EXCEPTION)
 
     def get_response_for_question_dto(self, question_dto: QuestionDto):
 

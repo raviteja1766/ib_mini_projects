@@ -1,5 +1,4 @@
 from django.db import models
-from .user import User
 from content_management_portal.constants.enums import CodeLanguageType
 from .question import Question
 
@@ -11,4 +10,4 @@ class RoughSolution(models.Model):
     )
     code = models.TextField()
     question = models.ForeignKey(Question, on_delete = models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.IntegerField()
