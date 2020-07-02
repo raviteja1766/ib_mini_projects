@@ -300,8 +300,7 @@ class PresenterImplementation(PresenterInterface):
         return [
             {
                 "user_id": user_dto.user_id,
-                "name": user_dto.name,
-                "profile_pic": user_dto.profile_pic
+                "username": user_dto.username
             }
             for user_dto in user_dtos
         ]

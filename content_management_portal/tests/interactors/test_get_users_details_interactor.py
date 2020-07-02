@@ -12,7 +12,6 @@ from user_app.exceptions.exceptions import DuplicateUserIds, InvalidUserIds
 
 
 
-
 def test_given_duplicate_question_ids_raises_exception():
 
     # Arrange
