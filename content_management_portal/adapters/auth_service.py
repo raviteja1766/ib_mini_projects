@@ -1,5 +1,6 @@
 from typing import List
-from content_management_portal.dtos.dtos import UserDto
+from content_management_portal.interactors.presenters.dtos \
+    import UserDto
 from content_management_portal.exceptions.exceptions \
     import InvalidCMPUserIds, DuplicateCMPUserIds
 from user_app.exceptions.exceptions import InvalidUserIds, DuplicateUserIds
@@ -24,8 +25,7 @@ class AuthService:
         user_dtos = [
             UserDto(
                 user_id=user_dto.user_id,
-                name=user_dto.name,
-                profile_pic=user_dto.profile_pic
+                username=user_dto.username,
             )
             for user_dto in user_dtos
         ]
