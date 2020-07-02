@@ -1,10 +1,9 @@
 
 from typing import List
 
-from user_app.interactors.storages.user_storage_interface\
+from user_app.interactors.storages.user_storage_interface \
     import UserStorageInterface
-from content_management_portal.exceptions.exceptions \
-    import DuplicateUserIds, InvalidUserIds
+from user_app.exceptions.exceptions import DuplicateUserIds, InvalidUserIds
 
 
 class GetUserDetailsInteractor:

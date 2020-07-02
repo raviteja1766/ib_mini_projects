@@ -42,3 +42,6 @@ SOLUTION_APPROACH_ALREADY_EXISTS = (
 DUPLICATE_IDS_EXCEPTION = (
     "Duplication of ids not accepted for updation", "DUPLICATE_IDS_EXCEPTION"
 )
+INVALID_USER_IDS = (
+    "Please send valid user ids", "INVALID_USER_IDS"
+)
