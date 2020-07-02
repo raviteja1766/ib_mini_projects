@@ -20,11 +20,15 @@ class RoughSolutionsQuestionMisMatch(Exception):
     pass
 
 
-class DuplicateUserIds(Exception):
-    def __init__(self, user_ids: List[int]):
-        self.user_ids = user_ids
 
 
-class InvalidUserIds(Exception):
-    def __init__(self, user_ids: List[int]):
-        self.user_ids = user_ids
+class InvalidCMPUserIds(Exception):
+    pass
+
+
+class DuplicateQuestionIds(Exception):
+    pass
+
+
+class DuplicateCMPUserIds(Exception):
+    pass

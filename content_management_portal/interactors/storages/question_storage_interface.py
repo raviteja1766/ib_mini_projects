@@ -38,3 +38,11 @@ class QuestionStorageInterface(ABC):
     @abstractmethod
     def get_total_questions_count(self) -> int:
         pass
+
+    @abstractmethod
+    def get_user_ids_of_questions(self, question_ids: List[int]):
+        pass
+
+    @abstractmethod
+    def get_valid_question_ids(self, question_ids: List[int]):
+        pass

@@ -69,19 +69,17 @@ def test_login_user_given_invalid_password_raises_exception_for_invalid_password
     presenter.raise_exception_for_invalid_password.assert_called_once()
 
 
-userauthtoken = UserAuthTokensDTO(
-    user_id=1, access_token="1OfS6IZWCum8Jgpudp6FcAnqfKAb7t",
-    refresh_token="SLnTl4l4z07mW7s96AlBcuXBhvVeid",
-    expires_in=datetime.datetime(5189, 4, 11, 9, 51, 25, 278085)
-)
-
-
-@patch.object(OAuthUserAuthTokensService, 'create_user_auth_tokens',
-              return_value=userauthtoken)
+@patch.object(OAuthUserAuthTokensService, 'create_user_auth_tokens')
 def test_login_user_given_valid_details_returns_accesstoken_dto(
-        create_user_auth_tokens):
+        user_auth_token):
 
     # Arrange
+    userauthtoken = UserAuthTokensDTO(
+        user_id=1, access_token="1OfS6IZWCum8Jgpudp6FcAnqfKAb7t",
+        refresh_token="SLnTl4l4z07mW7s96AlBcuXBhvVeid",
+        expires_in=datetime.datetime(5189, 4, 11, 9, 51, 25, 278085)
+    )
+    user_auth_token.return_value = userauthtoken
     presenter_response = {
         "access_token": "1OfS6IZWCum8Jgpudp6FcAnqfKAb7t",
         "refresh_token": "SLnTl4l4z07mW7s96AlBcuXBhvVeid",

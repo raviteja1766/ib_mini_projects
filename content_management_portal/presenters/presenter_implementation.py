@@ -14,28 +14,11 @@ from content_management_portal.interactors.storages.dtos\
         SolutionApproachDto, HintDto
     )
 from content_management_portal.constants.exception_messages import *
+from content_management_portal.interactors.presenters.dtos import UserDto
 
 
 class PresenterImplementation(PresenterInterface):
 
-    def get_response_for_login_user(
-            self, user_auth_token_dto: UserAuthTokensDTO):
-
-        return {
-            "user_id": user_auth_token_dto.user_id,
-            "access_token": user_auth_token_dto.access_token,
-            "refresh_token": user_auth_token_dto.refresh_token,
-            "expires_in": str(user_auth_token_dto.expires_in)
-        }
-
-
-    def raise_exception_for_invalid_username(self):
-
-        raise Unauthorized(*INVALID_USERNAME_EXCEPTION)
-
-    def raise_exception_for_invalid_password(self):
-
-        raise Unauthorized(*INVALID_PASSWORD_EXCEPTION)
 
     def raise_exception_for_invalid_question(self):
 
@@ -308,3 +291,22 @@ class PresenterImplementation(PresenterInterface):
     def raise_exception_for_duplicate_ids(self):
 
         raise BadRequest(*DUPLICATE_IDS_EXCEPTION)
+
+
+    # for practice purpose
+
+    def get_questions_user_details_response(self, user_dtos: List[UserDto]):
+
+        return [
+            {
+                "user_id": user_dto.user_id,
+                "name": user_dto.name,
+                "profile_pic": user_dto.profile_pic
+            }
+            for user_dto in user_dtos
+        ]
+
+
+    def raise_exception_for_invalid_user_ids(self):
+
+        raise NotFound(*INVALID_USER_IDS)

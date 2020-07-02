@@ -268,3 +268,16 @@ class QuestionStorageImplementation(QuestionStorageInterface):
                 user_id=rough_solution_obj.user_id
             ) for rough_solution_obj in rough_solution_objs
         ]
+
+
+    def get_user_ids_of_questions(self, question_ids: List[int]):
+
+        user_ids = Question.objects.filter(id__in=question_ids)\
+            .values_list('user_id', flat=True)
+        return user_ids
+
+    def get_valid_question_ids(self, question_ids: List[int]):
+
+        question_ids = Question.objects.filter(id__in=question_ids)\
+            .values_list('id', flat=True)
+        return question_ids
