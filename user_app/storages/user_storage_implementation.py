@@ -26,7 +26,9 @@ class UserStorageImplementation(UserStorageInterface):
 
     def get_valid_user_ids(self, user_ids: List[int]) -> Optional[List[int]]:
 
-        return list(User.objects.filter(id__in=user_ids))
+        return list(
+            User.objects.filter(id__in=user_ids).values_list('id', flat=True)
+        )
 
 
     def get_user_details_dtos(self, user_ids: List[int]) -> List[UserDto]:
