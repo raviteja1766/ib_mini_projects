@@ -30,6 +30,9 @@ def test_get_user_details_given_valid_details_returns_user_details():
 
     # Assert
     assert response == user_dtos
+    user_storage.get_user_details_dtos\
+        .assert_called_once_with(user_ids=user_ids)
+    user_storage.get_valid_user_ids.assert_called_once_with(user_ids=user_ids)
 
 def test_get_user_details_given_duplicate_user_ids_raises_exception():
 
@@ -64,3 +67,6 @@ def test_get_user_details_given_invalid_user_ids_raises_exception():
     # Act
     with pytest.raises(InvalidUserIds):
         interactor.get_user_details_wrapper(user_ids=user_ids)
+
+    # Assert
+    user_storage.get_valid_user_ids.assert_called_once_with(user_ids=user_ids)
