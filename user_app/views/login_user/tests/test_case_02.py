@@ -35,15 +35,10 @@ class TestCase01LoginUserAPITestCase(CustomAPITestCase):
     url_suffix = URL_SUFFIX
     test_case_dict = TEST_CASE
 
-    @patch.object(OAuthUserAuthTokensService, 'create_user_auth_tokens')
-    def test_case(self, mock_obj):
-        mock_obj.return_value = UserAuthTokensDTO(
-            user_id=1, access_token="1OfS6IZWCum8Jgpudp6FcAnqfKAb7t",
-            refresh_token="SLnTl4l4z07mW7s96AlBcuXBhvVeid",
-            expires_in=datetime.datetime(5189, 4, 11, 9, 51, 25, 278085)
-        )
+
+    def test_case(self):
         user_obj = User.objects.create(username="raviteja")
-        user_obj.set_password("asdf1234")
+        user_obj.set_password("asdf@1234")
         user_obj.save()
         self.default_test_case() # Returns response object.
         # Which can be used for further response object checks.

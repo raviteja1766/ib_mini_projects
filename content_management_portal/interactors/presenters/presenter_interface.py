@@ -7,6 +7,8 @@ from content_management_portal.interactors.storages.dtos\
         PrefilledCodeDto, CleanSolutionDto,
         SolutionApproachDto, HintDto, CodingQuestionDto
     )
+from content_management_portal.interactors.presenters.dtos import UserDto
+
 
 class PresenterInterface(ABC):
 
@@ -126,4 +128,12 @@ class PresenterInterface(ABC):
 
     @abstractmethod
     def raise_exception_for_duplicate_ids(self):
+        pass
+
+    @abstractmethod
+    def get_questions_user_details_response(self, user_dtos: List[UserDto]):
+        pass
+
+    @abstractmethod
+    def raise_exception_for_invalid_user_ids(self):
         pass
